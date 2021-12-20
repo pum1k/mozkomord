@@ -1,0 +1,6 @@
+#ifndef MOZKOMORD_PREC_WXPREC_HPP_
+#define MOZKOMORD_PREC_WXPREC_HPP_
+
+#include <wx/wx.h>
+
+#endif /* MOZKOMORD_PREC_WXPREC_HPP_ */

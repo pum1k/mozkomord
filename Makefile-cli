@@ -1,0 +1,96 @@
+# Author:      Tomáš David
+# Modified by: 
+
+# Config =======================================================================
+# Compilation settings ---------------------------------------------------------
+CXX      := g++
+CXXFLAGS := 
+LDFLAGS  := 
+LDLIBS   :=
+debug: CXXFLAGS += -g -DDEBUG
+debug: LDFLAGS  += 
+
+# Project settings -------------------------------------------------------------
+
+# print prefix
+PRINT := [CLI]:
+DONE  := \
+\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\# CLI BUILD DONE\
+ \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#
+# files and folders names
+BUILD_PATH                := ./build
+BINARY_NAME               := bfi.exe
+SOURCES_PATHS             := ./src/bfi
+HEADERS_PATHS             := ./src/bfi
+PRECOMPILED_HEADERS_PATHS :=
+
+# you can add as many include paths as you want
+INCLUDE_PATHS := 
+
+# only works with one path
+DLL_PATH := 
+DLL_LIST := 
+
+
+# End of configuration part ====================================================
+
+# final binary path
+TARGET   := $(BUILD_PATH)/$(BINARY_NAME)
+# generate list of headerfiles in project
+DEPS 	 := $(foreach path, $(HEADERS_PATHS), $(wildcard $(path)/*.hpp))
+# source and object files
+SOURCES  := $(foreach path, $(SOURCES_PATHS), $(wildcard $(path)/*.cpp))
+OBJS     := $(patsubst %.cpp, %.o, $(SOURCES))
+# headers for precompilation
+PCHLIST  := $(foreach path, $(PRECOMPILED_HEADERS_PATHS), $(wildcard $(path)/*.hpp))
+GCHLIST  :=  $(patsubst %.hpp, %.hpp.gch, $(PCHLIST))
+# where should be DLLs copied to
+DLL_DEST := $(addsuffix .dll, $(addprefix $(BUILD_PATH)/, $(DLL_LIST)))
+
+# wxWidgets settings
+CXXFLAGS += $(addprefix -I, $(INCLUDE_PATHS))
+LDFLAGS  += $(addprefix -L, $(DLL_PATH))
+LDLIBS   += $(addprefix -l, $(DLL_LIST))
+
+.PHONY: all debug clean cleanall
+
+# Compile binary + copy DLLs
+all: $(TARGET) $(DLL_DEST)
+
+debug: all
+
+# Link object files
+$(TARGET): $(OBJS)
+	-@mkdir $(subst /,\,$(strip $(@D)))
+	@echo $(PRINT)Linking... & echo (flags: $(LDFLAGS) $(LDLIBS))
+	@$(CXX) -o $@ $(OBJS) $(LDFLAGS) $(LDLIBS)
+	@echo $(DONE)\
+& echo Please wait for this command to exit.
+
+# Compiling object files
+$(OBJS): %.o: %.cpp $(DEPS) $(GCHLIST)
+	@echo $(PRINT)$(CXX) -c $< (flags: $(CXXFLAGS))
+	@$(CXX) $< -c -o $@ $(CXXFLAGS)
+
+# Compiling precompiled headers
+$(GCHLIST): %.hpp.gch: %.hpp
+	@echo $(PRINT)$(CXX) -c $< (flags: $(CXXFLAGS))
+	@$(CXX) $< -c -o $@ $(CXXFLAGS)
+
+# Copying DLLs
+$(DLL_DEST) : $(BUILD_PATH)/% : $(DLL_PATH)/%
+	@echo $(PRINT)copying $(subst /,\, $^) to $(subst /,\, $@)...
+	@copy /B $(subst /,\, $^) $(subst /,\, $@)
+
+# list of files to be removed
+# fixes pathnames to Windows style (required for CMD)
+TOCLEAN :=
+clean:    TOCLEAN += $(subst /,\,$(strip $(TARGET)))
+clean:    TOCLEAN += $(subst /,\,$(strip $(OBJS)))
+clean:    TOCLEAN += $(subst /,\,$(strip $(GCHLIST)))
+cleanall: TOCLEAN += $(subst /,\,$(strip $(DLL_DEST)))
+
+cleanall: clean
+
+clean:
+	@for %%F in ($(TOCLEAN)) do ( echo $(PRINT)del %%F & del %%F )

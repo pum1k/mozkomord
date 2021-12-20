@@ -1,0 +1,6 @@
+*.o
+*.gch
+*.exe
+build/*
+wxW*/*
+.vscode/*
