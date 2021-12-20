@@ -1,0 +1,3 @@
+[submodule "arg-parser"]
+	path = arg-parser
+	url = https://github.com/pum1k/arg-parser.git
