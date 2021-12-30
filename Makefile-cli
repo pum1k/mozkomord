@@ -22,6 +22,7 @@ BUILD_PATH                := ./build
 BINARY_NAME               := bfi.exe
 SOURCES_PATHS             := ./src/cli
 HEADERS_PATHS             := ./src/cli
+HEADERS_PATHS             := ./src/cli/BF
 PRECOMPILED_HEADERS_PATHS :=
 
 # you can add as many include paths as you want
@@ -38,6 +39,7 @@ DLL_LIST :=
 TARGET   := $(BUILD_PATH)/$(BINARY_NAME)
 # generate list of headerfiles in project
 DEPS 	 := $(foreach path, $(HEADERS_PATHS), $(wildcard $(path)/*.hpp))
+DEPS 	 += $(foreach path, $(HEADERS_PATHS), $(wildcard $(path)/*.tpp))
 # source and object files
 SOURCES  := $(foreach path, $(SOURCES_PATHS), $(wildcard $(path)/*.cpp))
 OBJS     := $(patsubst %.cpp, %.o, $(SOURCES))
