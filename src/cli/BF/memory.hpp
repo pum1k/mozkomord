@@ -75,4 +75,6 @@ class BFMemoryStaticLoop : public BFMemoryStaticBase<T>
     virtual void dec_ptr() override;
 };
 
+#include "memory.tpp"
+
 #endif // CLI_BF_MEMORY_HPP_
