@@ -4,7 +4,7 @@ template <class T>
 BFMemoryStaticBase<T>::BFMemoryStaticBase(std::size_t size)
 {
     this->size_ = size;
-    this->arr   = new T[size]{0};
+    this->arr   = new T[size]();
     this->ptr   = this->arr;
 }
 
