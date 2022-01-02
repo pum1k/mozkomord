@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <stdexcept>
+#include <vector>
 
 template <class T>
 class BFMemoryBase
@@ -73,6 +74,22 @@ class BFMemoryStaticLoop : public BFMemoryStaticBase<T>
 
     virtual void inc_ptr() override;
     virtual void dec_ptr() override;
+};
+
+template <class T>
+class BFMemoryDynamic : public BFMemoryBase<T>
+{
+ protected:
+    std::vector<T> vec;
+    std::size_t index;
+
+ public:
+    BFMemoryDynamic();
+    virtual void inc_val() override;
+    virtual void dec_val() override;
+    virtual void inc_ptr() override;
+    virtual void dec_ptr() override;
+    virtual T &ref() override;
 };
 
 #include "memory.tpp"
