@@ -87,3 +87,50 @@ void BFMemoryStaticLoop<T>::dec_ptr()
     }
     --(this->ptr);
 }
+
+template <class T>
+BFMemoryDynamic<T>::BFMemoryDynamic()
+{
+    this->vec.resize(1);
+    this->index = 0;
+}
+
+template <class T>
+void BFMemoryDynamic<T>::inc_val()
+{
+    ++(this->vec[this->index]);
+}
+
+template <class T>
+void BFMemoryDynamic<T>::dec_val()
+{
+    --(this->vec[this->index]);
+}
+
+template <class T>
+void BFMemoryDynamic<T>::inc_ptr()
+{
+    ++(this->index);
+    if (this->index == this->vec.size())
+    {
+        this->vec.resize(this->vec.size() + 1);
+    }
+}
+
+template <class T>
+void BFMemoryDynamic<T>::dec_ptr()
+{
+    if (this->index == 0)
+    {
+        // TODO: Add error message
+        throw std::out_of_range("");
+    }
+
+    --(this->index);
+}
+
+template <class T>
+T &BFMemoryDynamic<T>::ref()
+{
+    return this->vec[this->index];
+}
