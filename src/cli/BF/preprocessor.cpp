@@ -8,7 +8,7 @@ void BFPreprocessor::set_program(const std::vector<char> &prog)
 const std::vector<char> &BFPreprocessor::get_program() { return this->program; }
 
 void BFPreprocessor::set_check(
-    const std::function<void(std::vector<char> &)> &func)
+    const std::function<void(const std::vector<char> &)> &func)
 {
     this->check_ = func;
 }
@@ -26,7 +26,7 @@ void BFPreprocessor::process(bool keep_debug /* = true */)
     return this->process_(this->program, keep_debug);
 }
 
-void BF_standard_check(std::vector<char> &prog)
+void BF_standard_check(const std::vector<char> &prog)
 {
     int opening_bracket_count = 0;
     int line_num              = 1;

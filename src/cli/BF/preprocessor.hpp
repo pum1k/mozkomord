@@ -9,14 +9,14 @@ class BFPreprocessor
  protected:
     std::vector<char> program;
 
-    std::function<void(std::vector<char> &)> check_;
+    std::function<void(const std::vector<char> &)> check_;
     std::function<void(std::vector<char> &, bool)> process_;
 
  public:
     void set_program(const std::vector<char> &prog);
     const std::vector<char> &get_program();
 
-    void set_check(const std::function<void(std::vector<char> &)> &func);
+    void set_check(const std::function<void(const std::vector<char> &)> &func);
     void set_process(
         const std::function<void(std::vector<char> &, bool)> &func);
 
@@ -24,6 +24,6 @@ class BFPreprocessor
     void process(bool keep_debug = true);
 };
 
-void BF_standard_check(std::vector<char> &prog);
+void BF_standard_check(const std::vector<char> &prog);
 
 #endif // CLI_BF_PREPROCESSOR_HPP_
