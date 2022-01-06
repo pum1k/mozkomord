@@ -24,4 +24,6 @@ class BFPreprocessor
     void process(bool keep_debug = true);
 };
 
+void BF_standard_check(std::vector<char> &prog);
+
 #endif // CLI_BF_PREPROCESSOR_HPP_
