@@ -5,18 +5,20 @@
 #include <stdexcept>
 #include <vector>
 
+namespace BF
+{
 template <class T>
-class BFMemoryBase
+class MemoryBase
 {
  protected:
-    BFMemoryBase(){};
+    MemoryBase(){};
 
  public:
-    virtual ~BFMemoryBase(){};
-    BFMemoryBase(const BFMemoryBase<T> &) = delete;
-    BFMemoryBase(BFMemoryBase<T> &&)      = delete;
-    BFMemoryBase &operator=(const BFMemoryBase<T> &) = delete;
-    BFMemoryBase &operator=(BFMemoryBase<T> &&) = delete;
+    virtual ~MemoryBase(){};
+    MemoryBase(const MemoryBase<T> &) = delete;
+    MemoryBase(MemoryBase<T> &&)      = delete;
+    MemoryBase &operator=(const MemoryBase<T> &) = delete;
+    MemoryBase &operator=(MemoryBase<T> &&) = delete;
 
     virtual void inc_val() = 0;
     virtual void dec_val() = 0;
@@ -26,17 +28,17 @@ class BFMemoryBase
 };
 
 template <class T>
-class BFMemoryStaticBase : public BFMemoryBase<T>
+class MemoryStaticBase : public MemoryBase<T>
 {
  protected:
     T *arr;
     T *ptr;
     std::size_t size_;
 
-    BFMemoryStaticBase(std::size_t size);
+    MemoryStaticBase(std::size_t size);
 
  public:
-    virtual ~BFMemoryStaticBase() override;
+    virtual ~MemoryStaticBase() override;
 
     virtual void inc_val() override;
     virtual void dec_val() override;
@@ -44,53 +46,55 @@ class BFMemoryStaticBase : public BFMemoryBase<T>
 };
 
 template <class T>
-class BFMemoryStaticUnsafe : public BFMemoryStaticBase<T>
+class MemoryStaticUnsafe : public MemoryStaticBase<T>
 {
  protected:
  public:
-    BFMemoryStaticUnsafe(std::size_t size) : BFMemoryStaticBase<T>(size) {}
+    MemoryStaticUnsafe(std::size_t size) : MemoryStaticBase<T>(size) {}
 
     virtual void inc_ptr() override;
     virtual void dec_ptr() override;
 };
 
 template <class T>
-class BFMemoryStaticSafe : public BFMemoryStaticBase<T>
+class MemoryStaticSafe : public MemoryStaticBase<T>
 {
  protected:
  public:
-    BFMemoryStaticSafe(std::size_t size) : BFMemoryStaticBase<T>(size) {}
+    MemoryStaticSafe(std::size_t size) : MemoryStaticBase<T>(size) {}
 
     virtual void inc_ptr() override;
     virtual void dec_ptr() override;
 };
 
 template <class T>
-class BFMemoryStaticLoop : public BFMemoryStaticBase<T>
+class MemoryStaticLoop : public MemoryStaticBase<T>
 {
  protected:
  public:
-    BFMemoryStaticLoop(std::size_t size) : BFMemoryStaticBase<T>(size) {}
+    MemoryStaticLoop(std::size_t size) : MemoryStaticBase<T>(size) {}
 
     virtual void inc_ptr() override;
     virtual void dec_ptr() override;
 };
 
 template <class T>
-class BFMemoryDynamic : public BFMemoryBase<T>
+class MemoryDynamic : public MemoryBase<T>
 {
  protected:
     std::vector<T> vec;
     std::size_t index;
 
  public:
-    BFMemoryDynamic();
+    MemoryDynamic();
     virtual void inc_val() override;
     virtual void dec_val() override;
     virtual void inc_ptr() override;
     virtual void dec_ptr() override;
     virtual T &ref() override;
 };
+
+} // namespace BF
 
 #include "memory.tpp"
 

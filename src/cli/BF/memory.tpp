@@ -1,7 +1,9 @@
 #include "memory.hpp"
 
+namespace BF
+{
 template <class T>
-BFMemoryStaticBase<T>::BFMemoryStaticBase(std::size_t size)
+MemoryStaticBase<T>::MemoryStaticBase(std::size_t size)
 {
     this->size_ = size;
     this->arr   = new T[size]();
@@ -9,43 +11,43 @@ BFMemoryStaticBase<T>::BFMemoryStaticBase(std::size_t size)
 }
 
 template <class T>
-BFMemoryStaticBase<T>::~BFMemoryStaticBase()
+MemoryStaticBase<T>::~MemoryStaticBase()
 {
     delete[] this->arr;
 }
 
 template <class T>
-void BFMemoryStaticBase<T>::inc_val()
+void MemoryStaticBase<T>::inc_val()
 {
     ++(*this->ptr);
 }
 
 template <class T>
-void BFMemoryStaticBase<T>::dec_val()
+void MemoryStaticBase<T>::dec_val()
 {
     --(*this->ptr);
 }
 
 template <class T>
-T &BFMemoryStaticBase<T>::ref()
+T &MemoryStaticBase<T>::ref()
 {
     return *this->ptr;
 }
 
 template <class T>
-void BFMemoryStaticUnsafe<T>::inc_ptr()
+void MemoryStaticUnsafe<T>::inc_ptr()
 {
     ++(this->ptr);
 }
 
 template <class T>
-void BFMemoryStaticUnsafe<T>::dec_ptr()
+void MemoryStaticUnsafe<T>::dec_ptr()
 {
     --(this->ptr);
 }
 
 template <class T>
-void BFMemoryStaticSafe<T>::inc_ptr()
+void MemoryStaticSafe<T>::inc_ptr()
 {
     if ((this->ptr - this->arr) == (this->size_ - 1))
     {
@@ -56,7 +58,7 @@ void BFMemoryStaticSafe<T>::inc_ptr()
 }
 
 template <class T>
-void BFMemoryStaticSafe<T>::dec_ptr()
+void MemoryStaticSafe<T>::dec_ptr()
 {
     if (this->ptr == this->arr)
     {
@@ -67,7 +69,7 @@ void BFMemoryStaticSafe<T>::dec_ptr()
 }
 
 template <class T>
-void BFMemoryStaticLoop<T>::inc_ptr()
+void MemoryStaticLoop<T>::inc_ptr()
 {
     if ((this->ptr - this->arr) == (this->size_ - 1))
     {
@@ -78,7 +80,7 @@ void BFMemoryStaticLoop<T>::inc_ptr()
 }
 
 template <class T>
-void BFMemoryStaticLoop<T>::dec_ptr()
+void MemoryStaticLoop<T>::dec_ptr()
 {
     if (this->ptr == this->arr)
     {
@@ -89,26 +91,26 @@ void BFMemoryStaticLoop<T>::dec_ptr()
 }
 
 template <class T>
-BFMemoryDynamic<T>::BFMemoryDynamic()
+MemoryDynamic<T>::MemoryDynamic()
 {
     this->vec.resize(1);
     this->index = 0;
 }
 
 template <class T>
-void BFMemoryDynamic<T>::inc_val()
+void MemoryDynamic<T>::inc_val()
 {
     ++(this->vec[this->index]);
 }
 
 template <class T>
-void BFMemoryDynamic<T>::dec_val()
+void MemoryDynamic<T>::dec_val()
 {
     --(this->vec[this->index]);
 }
 
 template <class T>
-void BFMemoryDynamic<T>::inc_ptr()
+void MemoryDynamic<T>::inc_ptr()
 {
     ++(this->index);
     if (this->index == this->vec.size())
@@ -118,7 +120,7 @@ void BFMemoryDynamic<T>::inc_ptr()
 }
 
 template <class T>
-void BFMemoryDynamic<T>::dec_ptr()
+void MemoryDynamic<T>::dec_ptr()
 {
     if (this->index == 0)
     {
@@ -130,7 +132,9 @@ void BFMemoryDynamic<T>::dec_ptr()
 }
 
 template <class T>
-T &BFMemoryDynamic<T>::ref()
+T &MemoryDynamic<T>::ref()
 {
     return this->vec[this->index];
 }
+
+} // namespace BF

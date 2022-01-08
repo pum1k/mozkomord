@@ -1,32 +1,34 @@
 #include "preprocessor.hpp"
 
-void BFPreprocessor::set_program(const std::vector<char> &prog)
+namespace BF
+{
+void Preprocessor::set_program(const std::vector<char> &prog)
 {
     this->program = prog;
 }
 
-const std::vector<char> &BFPreprocessor::get_program() { return this->program; }
+const std::vector<char> &Preprocessor::get_program() { return this->program; }
 
-void BFPreprocessor::set_check(
+void Preprocessor::set_check(
     const std::function<void(const std::vector<char> &)> &func)
 {
     this->check_ = func;
 }
 
-void BFPreprocessor::set_process(
+void Preprocessor::set_process(
     const std::function<void(std::vector<char> &, bool)> &func)
 {
     this->process_ = func;
 }
 
-void BFPreprocessor::check() { return this->check_(this->program); }
+void Preprocessor::check() { return this->check_(this->program); }
 
-void BFPreprocessor::process(bool keep_debug /* = true */)
+void Preprocessor::process(bool keep_debug /* = true */)
 {
     return this->process_(this->program, keep_debug);
 }
 
-void BF_standard_check(const std::vector<char> &prog)
+void standard_check(const std::vector<char> &prog)
 {
     int opening_bracket_count = 0;
     int line_num              = 1;
@@ -58,3 +60,5 @@ void BF_standard_check(const std::vector<char> &prog)
         throw std::exception();
     }
 }
+
+} // namespace BF

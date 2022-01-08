@@ -4,7 +4,9 @@
 #include <functional>
 #include <vector>
 
-class BFPreprocessor
+namespace BF
+{
+class Preprocessor
 {
  protected:
     std::vector<char> program;
@@ -24,6 +26,8 @@ class BFPreprocessor
     void process(bool keep_debug = true);
 };
 
-void BF_standard_check(const std::vector<char> &prog);
+void standard_check(const std::vector<char> &prog);
+
+} // namespace BF
 
 #endif // CLI_BF_PREPROCESSOR_HPP_
