@@ -26,4 +26,9 @@ bool unexpected_bracket_error::has_pos() const noexcept
     return !(this->pos.first == 0 || this->pos.second == 0);
 }
 
+const char *missing_bracket_error::what() const noexcept
+{
+    return "Missing closing bracket.";
+}
+
 } // namespace BF

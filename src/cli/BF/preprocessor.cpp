@@ -43,9 +43,7 @@ void standard_check(const std::vector<char> &prog)
             --opening_bracket_count;
             if (opening_bracket_count < 0)
             {
-                // TODO: Change to different exception class, probably custom
-                // "Unexpected closing bracket."
-                throw std::exception();
+                throw unexpected_bracket_error();
             }
         }
         else if (c == '\n')
@@ -55,9 +53,7 @@ void standard_check(const std::vector<char> &prog)
     }
     if (opening_bracket_count > 0)
     {
-        // TODO: Change to different exception class, probably custom
-        // "Missing closing bracket."
-        throw std::exception();
+        throw missing_bracket_error();
     }
 }
 

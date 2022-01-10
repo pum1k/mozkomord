@@ -37,6 +37,12 @@ class unexpected_bracket_error : public syntax_error
     const std::pair<int, int> &get_pos() const noexcept { return pos; };
 };
 
+class missing_bracket_error : public syntax_error
+{
+ public:
+    virtual const char *what() const noexcept override;
+};
+
 } // namespace BF
 
 #endif // CLI_BF_EXCEPT_HPP_

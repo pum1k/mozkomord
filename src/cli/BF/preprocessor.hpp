@@ -4,6 +4,8 @@
 #include <functional>
 #include <vector>
 
+#include "except.hpp"
+
 namespace BF
 {
 class Preprocessor
