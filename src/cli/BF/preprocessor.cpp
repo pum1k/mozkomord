@@ -32,8 +32,11 @@ void standard_check(const std::vector<char> &prog)
 {
     int opening_bracket_count = 0;
     int line_num              = 1;
+    int char_num              = 0;
     for (char c : prog)
     {
+        ++char_num;
+
         if (c == '[')
         {
             ++opening_bracket_count;
@@ -43,12 +46,13 @@ void standard_check(const std::vector<char> &prog)
             --opening_bracket_count;
             if (opening_bracket_count < 0)
             {
-                throw unexpected_bracket_error();
+                throw unexpected_bracket_error(line_num, char_num);
             }
         }
         else if (c == '\n')
         {
             ++line_num;
+            char_num = 0;
         }
     }
     if (opening_bracket_count > 0)
