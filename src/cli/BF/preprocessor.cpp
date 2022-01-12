@@ -61,4 +61,33 @@ void standard_check(const std::vector<char> &prog)
     }
 }
 
+namespace prep
+{
+void noop(std::vector<char> &, bool) {}
+
+void remove_unused(std::vector<char> &prog, bool keep_debug)
+{
+    std::function<bool(char)> pred;
+    if (keep_debug)
+    {
+        pred = [](char c) -> bool
+        {
+            return !((c == '+') || (c == '-') || (c == '<') || (c == '>') ||
+                     (c == '[') || (c == ']') || (c == '.') || (c == ',') ||
+                     (c == '|'));
+        };
+    }
+    else
+    {
+        pred = [](char c) -> bool
+        {
+            return !((c == '+') || (c == '-') || (c == '<') || (c == '>') ||
+                     (c == '[') || (c == ']') || (c == '.') || (c == ','));
+        };
+    }
+
+    prog.erase(std::remove_if(prog.begin(), prog.end(), pred), prog.end());
+}
+} // namespace prep
+
 } // namespace BF

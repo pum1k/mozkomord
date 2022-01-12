@@ -1,6 +1,7 @@
 #ifndef CLI_BF_PREPROCESSOR_HPP_
 #define CLI_BF_PREPROCESSOR_HPP_
 
+#include <algorithm>
 #include <functional>
 #include <vector>
 
@@ -29,6 +30,12 @@ class Preprocessor
 };
 
 void standard_check(const std::vector<char> &prog);
+
+namespace prep
+{
+void noop(std::vector<char> &, bool);
+void remove_unused(std::vector<char> &prog, bool keep_debug);
+} // namespace prep
 
 } // namespace BF
 
