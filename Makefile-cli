@@ -21,8 +21,10 @@ DONE  := \
 BUILD_PATH                := ./build
 BINARY_NAME               := bfi.exe
 SOURCES_PATHS             := ./src/cli
+SOURCES_PATHS             += ./src/cli/BF
 HEADERS_PATHS             := ./src/cli
 HEADERS_PATHS             += ./src/cli/BF
+HEADERS_PATHS             += ./src/common
 PRECOMPILED_HEADERS_PATHS :=
 
 # you can add as many include paths as you want

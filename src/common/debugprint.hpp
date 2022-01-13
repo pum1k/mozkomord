@@ -7,7 +7,7 @@
 
 #ifdef DEBUG
 #    define DEBUG_PRINT(msg) std::cout << msg << std::endl
-#else // DEBUG
+#else // DEBUG not defined
 #    define DEBUG_PRINT(msg)
 #endif // DEBUG
 
