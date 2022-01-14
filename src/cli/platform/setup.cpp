@@ -11,12 +11,18 @@ ConsoleSetup::ConsoleSetup()
     DEBUG_PRINT("[Windows setup]: Changing output code page from: "
                 << this->console_out_cp_ << " to 65001 (UTF-8).");
     SetConsoleOutputCP(65001);
-#endif // WIN32
+#elif CLI_PLATFORM_UNRECOGNISED
+    DEBUG_PRINT(
+        "[Platform setup]: WARNING: Unsupported/unrecognised platform! "
+        "No platform depandent setup done.");
+#endif // WIN32, CLI_PLATFORM_UNRECOGNISED
 }
 
 ConsoleSetup::~ConsoleSetup()
 {
 #ifdef WIN32
     SetConsoleOutputCP(this->console_out_cp_);
+    DEBUG_PRINT("[Windows setup]: Cleanup - output code page set back to: "
+                << this->console_out_cp_);
 #endif // WIN32
 }

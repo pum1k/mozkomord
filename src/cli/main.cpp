@@ -1,7 +1,11 @@
 #include <iostream>
 
+#include "platform/setup.hpp"
+
 int main(int argc, const char *argv[])
 {
-    std::cout << "bfi placeholder" << std::endl;
+    ConsoleSetup s;
+
+    std::cout << "MozkoMørd" << std::endl;
     return 0;
 }

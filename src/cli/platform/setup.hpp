@@ -4,6 +4,7 @@
 #if !defined(WIN32)
 #    warning This platform is not supported or was not recognised. \
 This means no platform dependent setup will be made.
+#    define CLI_PLATFORM_UNRECOGNISED 1
 #endif // unrecognised platforms
 
 #include "../../common/debugprint.hpp"
