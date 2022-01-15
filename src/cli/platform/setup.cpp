@@ -2,7 +2,7 @@
 
 ConsoleSetup::ConsoleSetup()
 {
-#ifdef WIN32
+#ifdef _WIN32
     // SO question about displaying UTF-8 on windows
     // https://stackoverflow.com/a/35576741
     // MS Docs for GetConsoleOutputCP
@@ -15,14 +15,14 @@ ConsoleSetup::ConsoleSetup()
     DEBUG_PRINT(
         "[Platform setup]: WARNING: Unsupported/unrecognised platform! "
         "No platform depandent setup done.");
-#endif // WIN32, CLI_PLATFORM_UNRECOGNISED
+#endif // _WIN32, CLI_PLATFORM_UNRECOGNISED
 }
 
 ConsoleSetup::~ConsoleSetup()
 {
-#ifdef WIN32
+#ifdef _WIN32
     SetConsoleOutputCP(this->console_out_cp_);
     DEBUG_PRINT("[Windows setup]: Cleanup - output code page set back to: "
                 << this->console_out_cp_);
-#endif // WIN32
+#endif // _WIN32
 }
