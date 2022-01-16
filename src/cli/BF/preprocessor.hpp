@@ -19,7 +19,7 @@ class Preprocessor
 
  public:
     void set_program(const std::vector<char> &prog);
-    const std::vector<char> &get_program();
+    const std::vector<char> &get_program() const;
 
     void set_check(const std::function<void(const std::vector<char> &)> &func);
     void set_process(

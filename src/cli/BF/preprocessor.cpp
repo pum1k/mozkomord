@@ -7,7 +7,10 @@ void Preprocessor::set_program(const std::vector<char> &prog)
     this->program = prog;
 }
 
-const std::vector<char> &Preprocessor::get_program() { return this->program; }
+const std::vector<char> &Preprocessor::get_program() const
+{
+    return this->program;
+}
 
 void Preprocessor::set_check(
     const std::function<void(const std::vector<char> &)> &func)
