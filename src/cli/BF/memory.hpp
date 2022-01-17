@@ -14,6 +14,8 @@ class MemoryBase
     MemoryBase(){};
 
  public:
+    using value_type = T;
+
     virtual ~MemoryBase(){};
     MemoryBase(const MemoryBase<T> &) = delete;
     MemoryBase(MemoryBase<T> &&)      = delete;
