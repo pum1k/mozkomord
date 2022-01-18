@@ -17,6 +17,17 @@ MemoryStaticBase<T>::~MemoryStaticBase()
 }
 
 template <class T>
+void MemoryStaticBase<T>::reset()
+{
+    this->ptr = this->arr;
+
+    for (std::size_t i = 0; i < this->size_; i++)
+    {
+        this->arr[i] = 0;
+    }
+}
+
+template <class T>
 void MemoryStaticBase<T>::inc_val()
 {
     ++(*this->ptr);
@@ -95,6 +106,17 @@ MemoryDynamic<T>::MemoryDynamic()
 {
     this->vec.resize(1);
     this->index = 0;
+}
+
+template <class T>
+void MemoryDynamic<T>::reset()
+{
+    this->index = 0;
+
+    for (std::size_t i = 0; i < this->vec.size(); i++)
+    {
+        vec[i] = 0;
+    }
 }
 
 template <class T>

@@ -22,6 +22,8 @@ class MemoryBase
     MemoryBase &operator=(const MemoryBase<T> &) = delete;
     MemoryBase &operator=(MemoryBase<T> &&) = delete;
 
+    virtual void reset() = 0;
+
     virtual void inc_val() = 0;
     virtual void dec_val() = 0;
     virtual void inc_ptr() = 0;
@@ -41,6 +43,8 @@ class MemoryStaticBase : public MemoryBase<T>
 
  public:
     virtual ~MemoryStaticBase() override;
+
+    virtual void reset() override;
 
     virtual void inc_val() override;
     virtual void dec_val() override;
@@ -89,6 +93,9 @@ class MemoryDynamic : public MemoryBase<T>
 
  public:
     MemoryDynamic();
+
+    virtual void reset() override;
+
     virtual void inc_val() override;
     virtual void dec_val() override;
     virtual void inc_ptr() override;
