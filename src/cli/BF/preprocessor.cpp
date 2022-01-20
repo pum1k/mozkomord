@@ -2,36 +2,26 @@
 
 namespace BF
 {
-void Preprocessor::set_program(const std::vector<char> &prog)
-{
-    this->program = prog;
-}
-
-const std::vector<char> &Preprocessor::get_program() const
-{
-    return this->program;
-}
-
 void Preprocessor::set_check(
-    const std::function<void(const std::vector<char> &)> &func)
+    const std::function<void(const Program::container &)> &func)
 {
     this->check_ = func;
 }
 
 void Preprocessor::set_process(
-    const std::function<void(std::vector<char> &, bool)> &func)
+    const std::function<void(Program::container &, bool)> &func)
 {
     this->process_ = func;
 }
 
-void Preprocessor::check() { return this->check_(this->program); }
+void Preprocessor::check(Program &prog) { return this->check_(prog.get()); }
 
-void Preprocessor::process(bool keep_debug /* = true */)
+void Preprocessor::process(Program &prog, bool keep_debug /* = true */)
 {
-    return this->process_(this->program, keep_debug);
+    return this->process_(prog.get(), keep_debug);
 }
 
-void standard_check(const std::vector<char> &prog)
+void standard_check(const Program::container &prog)
 {
     int opening_bracket_count = 0;
     int line_num              = 1;
@@ -66,9 +56,9 @@ void standard_check(const std::vector<char> &prog)
 
 namespace prep
 {
-void noop(std::vector<char> &, bool) {}
+void noop(Program::container &, bool) {}
 
-void remove_unused(std::vector<char> &prog, bool keep_debug)
+void remove_unused(Program::container &prog, bool keep_debug)
 {
     std::function<bool(char)> pred;
     if (keep_debug)

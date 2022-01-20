@@ -54,7 +54,7 @@ void Interpreter<T>::left_square_bracket_(BF::Interpreter<T> *inter)
 {
     if (inter->mem->ref() != 0)
     {
-        std::vector<char>::const_iterator tmp = inter->inst_ptr;
+        Program::container::const_iterator tmp = inter->inst_ptr;
         do
         {
             inter->inst_ptr = tmp + 1;
@@ -123,7 +123,7 @@ Interpreter<T>::~Interpreter()
 }
 
 template <class T>
-bool Interpreter<T>::run(const std::vector<char> &prog)
+bool Interpreter<T>::run(const Program::container &prog)
 {
     if (this->mem == nullptr)
     {
@@ -139,9 +139,9 @@ bool Interpreter<T>::run(const std::vector<char> &prog)
 }
 
 template <class T>
-bool Interpreter<T>::run(const Preprocessor &prep)
+bool Interpreter<T>::run(const BF::Program &prog)
 {
-    return this->run(prep.get_program());
+    return this->run(prog.get_const());
 }
 
 template <class T>

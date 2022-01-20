@@ -3,38 +3,33 @@
 
 #include <algorithm>
 #include <functional>
-#include <vector>
 
 #include "except.hpp"
+#include "program.hpp"
 
 namespace BF
 {
 class Preprocessor
 {
  protected:
-    std::vector<char> program;
-
-    std::function<void(const std::vector<char> &)> check_;
-    std::function<void(std::vector<char> &, bool)> process_;
+    std::function<void(const Program::container &)> check_;
+    std::function<void(Program::container &, bool)> process_;
 
  public:
-    void set_program(const std::vector<char> &prog);
-    const std::vector<char> &get_program() const;
-
-    void set_check(const std::function<void(const std::vector<char> &)> &func);
+    void set_check(const std::function<void(const Program::container &)> &func);
     void set_process(
-        const std::function<void(std::vector<char> &, bool)> &func);
+        const std::function<void(Program::container &, bool)> &func);
 
-    void check();
-    void process(bool keep_debug = true);
+    void check(Program &prog);
+    void process(Program &prog, bool keep_debug = true);
 };
 
-void standard_check(const std::vector<char> &prog);
+void standard_check(const Program::container &prog);
 
 namespace prep
 {
-void noop(std::vector<char> &, bool);
-void remove_unused(std::vector<char> &prog, bool keep_debug);
+void noop(Program::container &, bool);
+void remove_unused(Program::container &prog, bool keep_debug);
 } // namespace prep
 
 } // namespace BF

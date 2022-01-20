@@ -4,10 +4,10 @@
 #include <algorithm>
 #include <istream>
 #include <ostream>
-#include <vector>
 
 #include "memory.hpp"
 #include "preprocessor.hpp"
+#include "program.hpp"
 
 namespace BF
 {
@@ -26,9 +26,9 @@ class InterpreterBase
     InterpreterBase &operator=(const InterpreterBase &) = delete;
     InterpreterBase &operator=(InterpreterBase &&) = delete;
 
-    virtual bool run(const std::vector<char> &prog) = 0;
-    virtual bool run(const Preprocessor &prep)      = 0;
-    virtual void reset_memory()                     = 0;
+    virtual bool run(const Program::container &prog) = 0;
+    virtual bool run(const BF::Program &prep)        = 0;
+    virtual void reset_memory()                      = 0;
 };
 
 template <class T>
@@ -41,8 +41,8 @@ class Interpreter : public InterpreterBase
 
     using fptr = void (*)(BF::Interpreter<T> *);
     fptr *function_table;
-    std::vector<char>::const_iterator inst_ptr;
-    std::vector<char>::const_iterator prog_end;
+    Program::container::const_iterator inst_ptr;
+    Program::container::const_iterator prog_end;
 
     void run_();
 
@@ -64,8 +64,8 @@ class Interpreter : public InterpreterBase
     Interpreter(std::ostream &os, std::istream &is, MemoryBase<T> *mem);
     virtual ~Interpreter();
 
-    virtual bool run(const std::vector<char> &prog) override;
-    virtual bool run(const Preprocessor &prep) override;
+    virtual bool run(const Program::container &prog) override;
+    virtual bool run(const BF::Program &prog) override;
     virtual void reset_memory() override;
 };
 
