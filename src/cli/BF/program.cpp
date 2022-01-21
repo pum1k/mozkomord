@@ -17,8 +17,7 @@ void Program::load(const std::string &file)
     std::ifstream in(file, std::ios::in | std::ios::binary);
     if (!in)
     {
-        // TODO: Add error message
-        throw std::exception();
+        throw load_file_error(file);
     }
 
     std::istreambuf_iterator<char> begin(in), end;

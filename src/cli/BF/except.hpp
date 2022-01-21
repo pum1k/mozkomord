@@ -43,6 +43,16 @@ class missing_bracket_error : public syntax_error
     virtual const char *what() const noexcept override;
 };
 
+class load_file_error : public std::exception
+{
+ private:
+    std::string msg;
+
+ public:
+    load_file_error(const std::string &filename);
+    virtual const char *what() const noexcept override;
+};
+
 } // namespace BF
 
 #endif // CLI_BF_EXCEPT_HPP_

@@ -159,4 +159,23 @@ T &MemoryDynamic<T>::ref()
     return this->vec[this->index];
 }
 
+template <class T>
+MemoryBase<T> *MemFactory::new_mem(std::size_t size)
+{
+    MemoryBase<T> *mem = nullptr;
+    switch (this->mem_type)
+    {
+    case MemoryType::STATIC_UNSAFE:
+        mem = new MemoryStaticUnsafe<T>(size);
+    case MemoryType::STATIC_SAFE:
+        mem = new MemoryStaticSafe<T>(size);
+    case MemoryType::STATIC_LOOP:
+        mem = new MemoryStaticLoop<T>(size);
+    case MemoryType::DYNAMIC:
+        mem = new MemoryDynamic<T>();
+    }
+
+    return mem;
+}
+
 } // namespace BF

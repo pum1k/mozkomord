@@ -21,7 +21,9 @@ void Preprocessor::process(Program &prog, bool keep_debug /* = true */)
     return this->process_(prog.get(), keep_debug);
 }
 
-void standard_check(const Program::container &prog)
+namespace check
+{
+void standard(const Program::container &prog)
 {
     int opening_bracket_count = 0;
     int line_num              = 1;
@@ -53,6 +55,7 @@ void standard_check(const Program::container &prog)
         throw missing_bracket_error();
     }
 }
+} // namespace check
 
 namespace prep
 {

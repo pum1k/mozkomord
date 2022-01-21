@@ -24,7 +24,10 @@ class Preprocessor
     void process(Program &prog, bool keep_debug = true);
 };
 
-void standard_check(const Program::container &prog);
+namespace check
+{
+void standard(const Program::container &prog);
+} // namespace check
 
 namespace prep
 {

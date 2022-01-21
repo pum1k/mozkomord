@@ -103,6 +103,28 @@ class MemoryDynamic : public MemoryBase<T>
     virtual T &ref() override;
 };
 
+enum MemoryType
+{
+    NONE,
+    STATIC_UNSAFE,
+    STATIC_SAFE,
+    STATIC_LOOP,
+    DYNAMIC,
+};
+
+class MemFactory
+{
+ private:
+    MemoryType mem_type;
+
+ public:
+    MemFactory(MemoryType mem_type = NONE) : mem_type(mem_type) {}
+    void set_mem_type(MemoryType mem_type) { this->mem_type = mem_type; }
+
+    template <class T>
+    MemoryBase<T> *new_mem(std::size_t size);
+};
+
 } // namespace BF
 
 #include "memory.tpp"

@@ -27,7 +27,7 @@ class InterpreterBase
     InterpreterBase &operator=(InterpreterBase &&) = delete;
 
     virtual bool run(const Program::container &prog) = 0;
-    virtual bool run(const BF::Program &prep)        = 0;
+    virtual bool run(const BF::Program &prog)        = 0;
     virtual void reset_memory()                      = 0;
 };
 
