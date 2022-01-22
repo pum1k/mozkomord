@@ -24,7 +24,7 @@ int main(int argc, const char *argv[])
 
     try
     {
-        if (!lang->load_options(argc - 1, &argv[1]))
+        if (!lang->load_options(argc, argv))
         {
             return 0;
         }
@@ -36,6 +36,7 @@ int main(int argc, const char *argv[])
         std::cerr << e.what() << '\n';
         std::cerr << "You can use \"--help\" option to get information about "
                      "options.\n";
+        return 1;
     }
 
     return 0;

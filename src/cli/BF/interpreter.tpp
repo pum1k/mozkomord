@@ -84,7 +84,7 @@ void Interpreter<T>::left_square_bracket_(BF::Interpreter<T> *inter)
 }
 
 template <class T>
-void Interpreter<T>::right_square_bracket_(BF::Interpreter<T> *inter)
+void Interpreter<T>::right_square_bracket_(BF::Interpreter<T> * /* inter */)
 {
     throw return_one_level{};
 }

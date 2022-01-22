@@ -1,8 +1,8 @@
 #include "language.hpp"
 
-void LangBF::print_help()
+void LangBF::print_help(const char *prog_name)
 {
-    std::cout << "Usage: bfi.exe [options]\n"
+    std::cout << "Usage: " << prog_name << " [options]\n"
               << "Options:\n";
     this->parser.print_help(std::cout);
 }
@@ -68,7 +68,7 @@ LangBF::LangBF()
           // Memory type
           {"mem-type",
            {"--mem-type"},
-           argp::OptionType::INT,
+           argp::OptionType::STRING,
            "Set memory type. Available values:\n"
            "      static-safe - static size, bounds checking (default)\n"
            "      static-unsafe - static size, no bounds checking\n"
@@ -114,7 +114,7 @@ bool LangBF::load_options(int argc, const char **argv)
 
     try
     {
-        unrecognised = !this->parser.parse(argc, argv, 0);
+        unrecognised = !this->parser.parse(argc, argv, 1);
     }
     catch (const std::exception &e)
     {
@@ -123,13 +123,20 @@ bool LangBF::load_options(int argc, const char **argv)
 
     if (this->parser.get_flag("help"))
     {
-        this->print_help();
+        this->print_help(argv[0]);
         return false;
     }
     if (unrecognised)
     {
         // TODO: Create better error message
-        throw options_error("Unrecognised parameters!");
+        std::string msg = "Unrecognised parameters:";
+        for (std::string param : this->parser.get_unrecognised())
+        {
+            msg += " \"";
+            msg += param;
+            msg += "\"";
+        }
+        throw options_error(msg);
     }
 
     this->process_options();
@@ -140,22 +147,21 @@ bool LangBF::load_options(int argc, const char **argv)
 }
 
 void LangBF::prepare()
+try
 {
-    try
-    {
-        this->setup_program();
-        this->setup_preprocessor();
-        this->setup_interpreter();
-        this->prep.check(this->prog);
-        this->prep.process(this->prog);
-    }
-    catch (const std::exception &e)
-    {
-        throw prepare_error(e.what());
-    }
+    this->setup_program();
+    this->setup_preprocessor();
+    this->setup_interpreter();
+    this->prep.check(this->prog);
+    this->prep.process(this->prog);
+}
+catch (const std::exception &e)
+{
+    throw prepare_error(e.what());
 }
 
 void LangBF::run()
+try
 {
 #ifdef DEBUG
     std::cout << "[LangBF]: This program will be run:\n";
@@ -166,4 +172,8 @@ void LangBF::run()
     std::cout << "\n#### End of program." << std::endl;
 #endif // DEBUG
     this->inter->run(this->prog);
+}
+catch (const std::exception &e)
+{
+    throw run_error(e.what());
 }

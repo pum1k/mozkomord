@@ -60,10 +60,11 @@ void MemoryStaticUnsafe<T>::dec_ptr()
 template <class T>
 void MemoryStaticSafe<T>::inc_ptr()
 {
-    if ((this->ptr - this->arr) == (this->size_ - 1))
+    if (static_cast<std::size_t>(this->ptr - this->arr) == (this->size_ - 1))
     {
-        // TODO: Add error message
-        throw std::out_of_range("");
+        throw std::out_of_range(
+            "Incrementing past the end of memory not allowed on this type. "
+            "Try increasing the size of memory or using a different type.");
     }
     ++(this->ptr);
 }
@@ -73,8 +74,9 @@ void MemoryStaticSafe<T>::dec_ptr()
 {
     if (this->ptr == this->arr)
     {
-        // TODO: Add error message
-        throw std::out_of_range("");
+        throw std::out_of_range(
+            "Decrementing pointer to the first element in the memory not "
+            "allowed on type. Try using a different memory type.");
     }
     --(this->ptr);
 }
@@ -82,7 +84,7 @@ void MemoryStaticSafe<T>::dec_ptr()
 template <class T>
 void MemoryStaticLoop<T>::inc_ptr()
 {
-    if ((this->ptr - this->arr) == (this->size_ - 1))
+    if (static_cast<std::size_t>(this->ptr - this->arr) == (this->size_ - 1))
     {
         this->ptr = this->arr;
         return;
@@ -146,8 +148,9 @@ void MemoryDynamic<T>::dec_ptr()
 {
     if (this->index == 0)
     {
-        // TODO: Add error message
-        throw std::out_of_range("");
+        throw std::out_of_range(
+            "Decrementing pointer to the first element in the memory not "
+            "allowed on type. Try using a different memory type.");
     }
 
     --(this->index);
@@ -163,16 +166,31 @@ template <class T>
 MemoryBase<T> *MemFactory::new_mem(std::size_t size)
 {
     MemoryBase<T> *mem = nullptr;
+
     switch (this->mem_type)
     {
     case MemoryType::STATIC_UNSAFE:
+        DEBUG_PRINT(
+            "[MemFactory]: Creating static unsafe memory of size: " << size);
         mem = new MemoryStaticUnsafe<T>(size);
+        break;
     case MemoryType::STATIC_SAFE:
+        DEBUG_PRINT(
+            "[MemFactory]: Creating static safe memory of size: " << size);
         mem = new MemoryStaticSafe<T>(size);
+        break;
     case MemoryType::STATIC_LOOP:
+        DEBUG_PRINT(
+            "[MemFactory]: Creating static loop memory of size: " << size);
         mem = new MemoryStaticLoop<T>(size);
+        break;
     case MemoryType::DYNAMIC:
+        DEBUG_PRINT("[MemFactory]: Creating dynamic memory");
         mem = new MemoryDynamic<T>();
+        break;
+    case MemoryType::NONE:
+    default:
+        throw mem_type_error();
     }
 
     return mem;

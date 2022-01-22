@@ -53,6 +53,15 @@ class load_file_error : public std::exception
     virtual const char *what() const noexcept override;
 };
 
+class mem_type_error : public std::bad_alloc
+{
+ private:
+    std::string msg;
+
+ public:
+    virtual const char *what() const noexcept override;
+};
+
 } // namespace BF
 
 #endif // CLI_BF_EXCEPT_HPP_

@@ -40,4 +40,9 @@ load_file_error::load_file_error(const std::string &filename)
 
 const char *load_file_error::what() const noexcept { return this->msg.c_str(); }
 
+const char *mem_type_error::what() const noexcept
+{
+    return "Cannot create memory of this type";
+}
+
 } // namespace BF

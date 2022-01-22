@@ -50,7 +50,7 @@ class Interpreter : public InterpreterBase
     {
     };
 
-    static void noop_(BF::Interpreter<T> *inter) {}
+    static void noop_(BF::Interpreter<T> * /* inter */) {}
     static void plus_sign_(BF::Interpreter<T> *inter);
     static void minus_sign_(BF::Interpreter<T> *inter);
     static void dot_(BF::Interpreter<T> *inter);
@@ -58,7 +58,7 @@ class Interpreter : public InterpreterBase
     static void less_than_sign_(BF::Interpreter<T> *inter);
     static void greater_than_sign_(BF::Interpreter<T> *inter);
     static void left_square_bracket_(BF::Interpreter<T> *inter);
-    static void right_square_bracket_(BF::Interpreter<T> *inter);
+    static void right_square_bracket_(BF::Interpreter<T> * /* inter */);
 
  public:
     Interpreter(std::ostream &os, std::istream &is, MemoryBase<T> *mem);

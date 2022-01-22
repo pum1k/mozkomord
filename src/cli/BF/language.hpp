@@ -21,7 +21,7 @@ class LangBF : public Language
     std::string default_s;
     int default_i;
 
-    void print_help();
+    void print_help(const char *prog_name);
 
     void process_options();
     void setup_program();
