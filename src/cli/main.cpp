@@ -31,6 +31,11 @@ int main(int argc, const char *argv[])
         lang->prepare();
         lang->run();
     }
+    catch (const debugger_terminate &e)
+    {
+        std::cerr << e.what() << '\n';
+        return -2;
+    }
     catch (const language_error &e)
     {
         std::cerr << e.what() << '\n';

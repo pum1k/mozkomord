@@ -33,9 +33,28 @@ void LangBF::process_options()
 
     // Memory size
     const int &stack_size = this->parser.get_int("mem-size");
-    if (!(stack_size == this->default_i || stack_size > 0))
+    if (stack_size == this->default_i)
+        this->mem_fact.set_mem_size(30000);
+    else if (stack_size > 0)
+        this->mem_fact.set_mem_size(stack_size);
+    else
     {
         throw options_error("Invalid value for \"--mem-size\" option.");
+    }
+
+    // Debug mode
+    // No check required
+    // This option is queried later in the program
+
+    // Mem cell size
+    const int &cell_size = this->parser.get_int("cell-size");
+    if (cell_size == this->default_i || cell_size == 8)
+        this->mem_data_type = BF::MemDataType::BIT8;
+    else if (cell_size == 16)
+        this->mem_data_type = BF::MemDataType::BIT16;
+    else
+    {
+        throw options_error("Invalid value for \"--cell-size\" option.");
     }
 }
 
@@ -47,15 +66,40 @@ void LangBF::setup_program()
 void LangBF::setup_preprocessor()
 {
     this->prep.set_check(BF::check::standard);
-    this->prep.set_process(BF::prep::remove_unused);
+
+    if (this->parser.get_flag("debug"))
+    {
+        this->prep.set_process(BF::prep::noop);
+    }
+    else
+    {
+        this->prep.set_process(BF::prep::remove_unused);
+    }
 }
 
 void LangBF::setup_interpreter()
 {
-    int mem_size_i       = this->parser.get_int("mem-size");
-    std::size_t mem_size = (mem_size_i < 0) ? 30000 : mem_size_i;
-    this->inter.reset(new BF::Interpreter<char>(
-        std::cout, std::cin, this->mem_fact.new_mem<char>(mem_size)));
+    BF::InterpreterBase *inter;
+
+    this->inter_fact.set_mem_factory(&this->mem_fact);
+
+    if (this->parser.get_flag("debug"))
+        this->inter_fact.set_inter_class(BF::InterClass::STANDARD_DEBUG);
+    else
+        this->inter_fact.set_inter_class(BF::InterClass::STANDARD);
+
+    switch (this->mem_data_type)
+    {
+    case BF::MemDataType::BIT8:
+        inter = this->inter_fact.new_inter<uint8_t>(std::cout, std::cin);
+        break;
+
+    case BF::MemDataType::BIT16:
+        inter = this->inter_fact.new_inter<uint16_t>(std::cout, std::cin);
+        break;
+    }
+
+    this->inter.reset(inter);
 }
 
 LangBF::LangBF()
@@ -85,6 +129,17 @@ LangBF::LangBF()
            "      Default: 30 000.\n"
            "      This option is ignored when using dynamic memory. "
            "(However, it will cause an error if set to invalid value.)"},
+          // Debug mode
+          {"debug",
+           {"--debug"},
+           argp::OptionType::FLAG,
+           "Run with debugging. (Breakpoint symbol \"|\")"},
+          // Mem cell size
+          {"cell-size",
+           {"--cell-size"},
+           argp::OptionType::INT,
+           "Set number of bits for every stack entry.\n"
+           "      Allowed values: 8 (default), 16"},
           // Help
           {"help", {"-h", "--help"}, argp::OptionType::FLAG, "Show this help."},
       })
@@ -128,7 +183,6 @@ bool LangBF::load_options(int argc, const char **argv)
     }
     if (unrecognised)
     {
-        // TODO: Create better error message
         std::string msg = "Unrecognised parameters:";
         for (std::string param : this->parser.get_unrecognised())
         {
@@ -172,6 +226,10 @@ try
     std::cout << "\n#### End of program." << std::endl;
 #endif // DEBUG
     this->inter->run(this->prog);
+}
+catch (const language_error &e)
+{
+    throw;
 }
 catch (const std::exception &e)
 {

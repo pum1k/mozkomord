@@ -5,6 +5,8 @@ class Language
 {
  private:
  public:
+    virtual ~Language(){};
+
     virtual bool load_options(int argc, const char **argv) = 0;
     virtual void prepare()                                 = 0;
     virtual void run()                                     = 0;
@@ -49,6 +51,17 @@ class run_error : public language_error
     run_error(const std::string &msg)
         : language_error(std::string("Error while running the program:\n  ") +
                          msg)
+    {
+    }
+};
+
+class debugger_terminate : public language_error
+{
+ public:
+    debugger_terminate(const std::string &reason)
+        : language_error(std::string("Interpreted program terminated by the "
+                                     "debugger, reason:\n  ") +
+                         reason)
     {
     }
 };

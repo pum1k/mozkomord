@@ -28,6 +28,8 @@ class LangBF : public Language
     void setup_preprocessor();
     void setup_interpreter();
 
+    BF::MemDataType mem_data_type;
+    BF::InterFactory inter_fact;
     BF::MemFactory mem_fact;
     BF::Program prog;
     BF::Preprocessor prep;

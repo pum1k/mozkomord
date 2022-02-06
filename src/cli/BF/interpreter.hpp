@@ -2,9 +2,15 @@
 #define CLI_BF_INTERPRETER_HPP_
 
 #include <algorithm>
+#include <codecvt>
+#include <fstream>
+#include <iomanip>
 #include <istream>
 #include <ostream>
+#include <sstream>
 
+#include "../../common/debugprint.hpp"
+#include "../language.hpp"
 #include "memory.hpp"
 #include "preprocessor.hpp"
 #include "program.hpp"
@@ -67,6 +73,69 @@ class Interpreter : public InterpreterBase
     virtual bool run(const Program::container &prog) override;
     virtual bool run(const BF::Program &prog) override;
     virtual void reset_memory() override;
+};
+
+template <class T>
+class DebugInterpreter : public Interpreter<T>
+{
+ protected:
+    MemDbgrBase<T> *mem_dbgr;
+
+    std::ostringstream fake_os;
+    std::istringstream fake_is;
+    std::ostream &real_os;
+    std::istream &real_is;
+
+    void debug_here();
+
+    Program::container::const_iterator prog_begin;
+
+    void print_help();
+    void print_context(int size);
+    void print_memory();
+    void dump_memory();
+    void print_all_input();
+    void print_all_output();
+
+    static void debug_dot_(BF::Interpreter<T> *inter);
+    static void debug_comma_(BF::Interpreter<T> *inter);
+    static void vertical_line_(BF::Interpreter<T> *inter);
+
+ public:
+    DebugInterpreter(std::ostream &os, std::istream &is, MemoryBase<T> *mem,
+                     MemDbgrBase<T> *mem_dbgr);
+    virtual ~DebugInterpreter() override;
+
+    virtual bool run(const Program::container &prog) override;
+};
+
+enum class InterClass
+{
+    NONE,
+    STANDARD,
+    STANDARD_DEBUG,
+};
+
+class InterFactory
+{
+ private:
+    InterClass inter_class;
+    MemFactory *mem_factory;
+
+    template <class T>
+    InterpreterBase *new_inter_standard(std::ostream &os, std::istream &is);
+    template <class T>
+    InterpreterBase *new_inter_standard_debug(std::ostream &os,
+                                              std::istream &is);
+
+ public:
+    InterFactory();
+
+    void set_inter_class(InterClass value);
+    void set_mem_factory(MemFactory *value);
+
+    template <class T>
+    InterpreterBase *new_inter(std::ostream &os, std::istream &is);
 };
 
 } // namespace BF

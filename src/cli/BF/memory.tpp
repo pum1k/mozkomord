@@ -163,26 +163,86 @@ T &MemoryDynamic<T>::ref()
 }
 
 template <class T>
-MemoryBase<T> *MemFactory::new_mem(std::size_t size)
+MemDbgrStatic<T>::MemDbgrStatic(MemoryStaticBase<T> *mem)
+{
+    if (mem != nullptr)
+    {
+        this->mem = mem;
+    }
+    else
+    {
+        // TODO: Add error message
+        throw std::exception();
+    }
+}
+
+template <class T>
+std::size_t MemDbgrStatic<T>::get_current_size()
+{
+    return this->mem->size_;
+}
+
+template <class T>
+T &MemDbgrStatic<T>::get_ref(std::size_t index)
+{
+    if (index >= 0 && index < this->get_current_size())
+    {
+        return this->mem->arr[index];
+    }
+    else
+    {
+        // TODO: Add error message
+        throw std::exception();
+    }
+}
+
+template <class T>
+MemDbgrDynamic<T>::MemDbgrDynamic(MemoryDynamic<T> *mem)
+{
+    if (mem != nullptr)
+    {
+        this->mem = mem;
+    }
+    else
+    {
+        // TODO: Add error message
+        throw std::exception();
+    }
+}
+
+template <class T>
+std::size_t MemDbgrDynamic<T>::get_current_size()
+{
+    return this->mem->vec.size();
+}
+
+template <class T>
+T &MemDbgrDynamic<T>::get_ref(std::size_t index)
+{
+    return this->mem->vec[index];
+}
+
+template <class T>
+MemoryBase<T> *MemFactory::new_mem()
 {
     MemoryBase<T> *mem = nullptr;
 
     switch (this->mem_type)
     {
     case MemoryType::STATIC_UNSAFE:
-        DEBUG_PRINT(
-            "[MemFactory]: Creating static unsafe memory of size: " << size);
-        mem = new MemoryStaticUnsafe<T>(size);
+        DEBUG_PRINT("[MemFactory]: Creating static unsafe memory of size: "
+                    << this->mem_size);
+        mem = new MemoryStaticUnsafe<T>(this->mem_size);
         break;
     case MemoryType::STATIC_SAFE:
-        DEBUG_PRINT(
-            "[MemFactory]: Creating static safe memory of size: " << size);
-        mem = new MemoryStaticSafe<T>(size);
+        DEBUG_PRINT("[MemFactory]: Creating static safe memory of size: "
+                    << this->mem_size);
+        mem = new MemoryStaticSafe<T>(this->mem_size);
         break;
     case MemoryType::STATIC_LOOP:
-        DEBUG_PRINT(
-            "[MemFactory]: Creating static loop memory of size: " << size);
-        mem = new MemoryStaticLoop<T>(size);
+        DEBUG_PRINT("[MemFactory]: Creating static loop memory of size: "
+                    << this->mem_size);
+        mem = new MemoryStaticLoop<T>(this->mem_size);
         break;
     case MemoryType::DYNAMIC:
         DEBUG_PRINT("[MemFactory]: Creating dynamic memory");
@@ -194,6 +254,34 @@ MemoryBase<T> *MemFactory::new_mem(std::size_t size)
     }
 
     return mem;
+}
+
+template <class T>
+std::pair<MemoryBase<T> *, MemDbgrBase<T> *> MemFactory::new_debug_mem()
+{
+    std::pair<MemoryBase<T> *, MemDbgrBase<T> *> rv;
+    rv.first = this->new_mem<T>();
+
+    switch (this->mem_type)
+    {
+    case MemoryType::STATIC_UNSAFE:
+    case MemoryType::STATIC_SAFE:
+    case MemoryType::STATIC_LOOP:
+        DEBUG_PRINT("[MemFactory]: Creating static memory debugger.");
+        rv.second =
+            new MemDbgrStatic<T>(static_cast<MemoryStaticBase<T> *>(rv.first));
+        break;
+    case MemoryType::DYNAMIC:
+        DEBUG_PRINT("[MemFactory]: Creating dynamic memory debugger");
+        rv.second =
+            new MemDbgrDynamic<T>(static_cast<MemoryDynamic<T> *>(rv.first));
+        break;
+    case MemoryType::NONE:
+    default:
+        throw mem_type_error();
+    }
+
+    return rv;
 }
 
 } // namespace BF
