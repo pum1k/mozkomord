@@ -154,17 +154,17 @@ class MemDbgrDynamic : public MemDbgrBase<T>
 
 enum class MemDataType
 {
-    BIT8,
-    BIT16,
+    bit8,
+    bit16,
 };
 
 enum class MemoryType
 {
-    NONE,
-    STATIC_UNSAFE,
-    STATIC_SAFE,
-    STATIC_LOOP,
-    DYNAMIC,
+    none,
+    static_unsafe,
+    static_safe,
+    static_loop,
+    dynamic,
 };
 
 class MemFactory
@@ -174,7 +174,7 @@ class MemFactory
     std::size_t mem_size;
 
  public:
-    MemFactory(MemoryType mem_type = MemoryType::NONE, std::size_t mem_size = 0)
+    MemFactory(MemoryType mem_type = MemoryType::none, std::size_t mem_size = 0)
         : mem_type(mem_type), mem_size(mem_size)
     {
     }

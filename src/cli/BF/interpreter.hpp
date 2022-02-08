@@ -111,9 +111,9 @@ class DebugInterpreter : public Interpreter<T>
 
 enum class InterClass
 {
-    NONE,
-    STANDARD,
-    STANDARD_DEBUG,
+    none,
+    standard,
+    standard_debug,
 };
 
 class InterFactory

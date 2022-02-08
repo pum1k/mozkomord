@@ -524,7 +524,7 @@ InterpreterBase *InterFactory::new_inter_standard_debug(std::ostream &os,
 }
 
 inline InterFactory::InterFactory()
-    : inter_class(InterClass::NONE), mem_factory(nullptr)
+    : inter_class(InterClass::none), mem_factory(nullptr)
 {
 }
 
@@ -551,15 +551,15 @@ InterpreterBase *InterFactory::new_inter(std::ostream &os, std::istream &is)
 
     switch (this->inter_class)
     {
-    case InterClass::STANDARD:
+    case InterClass::standard:
         rv = this->new_inter_standard<T>(os, is);
         break;
 
-    case InterClass::STANDARD_DEBUG:
+    case InterClass::standard_debug:
         rv = this->new_inter_standard_debug<T>(os, is);
         break;
 
-    case InterClass::NONE:
+    case InterClass::none:
     default:
         break;
     }

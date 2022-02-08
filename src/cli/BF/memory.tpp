@@ -229,26 +229,26 @@ MemoryBase<T> *MemFactory::new_mem()
 
     switch (this->mem_type)
     {
-    case MemoryType::STATIC_UNSAFE:
+    case MemoryType::static_unsafe:
         DEBUG_PRINT("[MemFactory]: Creating static unsafe memory of size: "
                     << this->mem_size);
         mem = new MemoryStaticUnsafe<T>(this->mem_size);
         break;
-    case MemoryType::STATIC_SAFE:
+    case MemoryType::static_safe:
         DEBUG_PRINT("[MemFactory]: Creating static safe memory of size: "
                     << this->mem_size);
         mem = new MemoryStaticSafe<T>(this->mem_size);
         break;
-    case MemoryType::STATIC_LOOP:
+    case MemoryType::static_loop:
         DEBUG_PRINT("[MemFactory]: Creating static loop memory of size: "
                     << this->mem_size);
         mem = new MemoryStaticLoop<T>(this->mem_size);
         break;
-    case MemoryType::DYNAMIC:
+    case MemoryType::dynamic:
         DEBUG_PRINT("[MemFactory]: Creating dynamic memory");
         mem = new MemoryDynamic<T>();
         break;
-    case MemoryType::NONE:
+    case MemoryType::none:
     default:
         throw mem_type_error();
     }
@@ -264,19 +264,19 @@ std::pair<MemoryBase<T> *, MemDbgrBase<T> *> MemFactory::new_debug_mem()
 
     switch (this->mem_type)
     {
-    case MemoryType::STATIC_UNSAFE:
-    case MemoryType::STATIC_SAFE:
-    case MemoryType::STATIC_LOOP:
+    case MemoryType::static_unsafe:
+    case MemoryType::static_safe:
+    case MemoryType::static_loop:
         DEBUG_PRINT("[MemFactory]: Creating static memory debugger.");
         rv.second =
             new MemDbgrStatic<T>(static_cast<MemoryStaticBase<T> *>(rv.first));
         break;
-    case MemoryType::DYNAMIC:
+    case MemoryType::dynamic:
         DEBUG_PRINT("[MemFactory]: Creating dynamic memory debugger");
         rv.second =
             new MemDbgrDynamic<T>(static_cast<MemoryDynamic<T> *>(rv.first));
         break;
-    case MemoryType::NONE:
+    case MemoryType::none:
     default:
         throw mem_type_error();
     }

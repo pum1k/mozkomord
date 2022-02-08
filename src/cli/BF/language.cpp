@@ -19,13 +19,13 @@ void LangBF::process_options()
     // Memory type
     const std::string &mem_type_s = this->parser.get_string("mem-type");
     if (mem_type_s == "static-safe" || mem_type_s == "")
-        this->mem_fact.set_mem_type(BF::MemoryType::STATIC_SAFE);
+        this->mem_fact.set_mem_type(BF::MemoryType::static_safe);
     else if (mem_type_s == "static-unsafe")
-        this->mem_fact.set_mem_type(BF::MemoryType::STATIC_UNSAFE);
+        this->mem_fact.set_mem_type(BF::MemoryType::static_unsafe);
     else if (mem_type_s == "static-loop")
-        this->mem_fact.set_mem_type(BF::MemoryType::STATIC_LOOP);
+        this->mem_fact.set_mem_type(BF::MemoryType::static_loop);
     else if (mem_type_s == "dynamic")
-        this->mem_fact.set_mem_type(BF::MemoryType::DYNAMIC);
+        this->mem_fact.set_mem_type(BF::MemoryType::dynamic);
     else
     {
         throw options_error("Invalid value for \"--mem-type\" option.");
@@ -49,9 +49,9 @@ void LangBF::process_options()
     // Mem cell size
     const int &cell_size = this->parser.get_int("cell-size");
     if (cell_size == this->default_i || cell_size == 8)
-        this->mem_data_type = BF::MemDataType::BIT8;
+        this->mem_data_type = BF::MemDataType::bit8;
     else if (cell_size == 16)
-        this->mem_data_type = BF::MemDataType::BIT16;
+        this->mem_data_type = BF::MemDataType::bit16;
     else
     {
         throw options_error("Invalid value for \"--cell-size\" option.");
@@ -84,17 +84,17 @@ void LangBF::setup_interpreter()
     this->inter_fact.set_mem_factory(&this->mem_fact);
 
     if (this->parser.get_flag("debug"))
-        this->inter_fact.set_inter_class(BF::InterClass::STANDARD_DEBUG);
+        this->inter_fact.set_inter_class(BF::InterClass::standard_debug);
     else
-        this->inter_fact.set_inter_class(BF::InterClass::STANDARD);
+        this->inter_fact.set_inter_class(BF::InterClass::standard);
 
     switch (this->mem_data_type)
     {
-    case BF::MemDataType::BIT8:
+    case BF::MemDataType::bit8:
         inter = this->inter_fact.new_inter<uint8_t>(std::cout, std::cin);
         break;
 
-    case BF::MemDataType::BIT16:
+    case BF::MemDataType::bit16:
         inter = this->inter_fact.new_inter<uint16_t>(std::cout, std::cin);
         break;
     }
