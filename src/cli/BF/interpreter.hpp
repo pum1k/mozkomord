@@ -68,7 +68,7 @@ class Interpreter : public InterpreterBase
 
  public:
     Interpreter(std::ostream &os, std::istream &is, MemoryBase<T> *mem);
-    virtual ~Interpreter();
+    virtual ~Interpreter() override;
 
     virtual bool run(const Program::container &prog) override;
     virtual bool run(const BF::Program &prog) override;
