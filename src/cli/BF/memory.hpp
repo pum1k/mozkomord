@@ -10,6 +10,12 @@
 
 namespace BF
 {
+// #############################################################################
+// #############################################################################
+// #### MEMORY #################################################################
+// #############################################################################
+// #############################################################################
+
 template <class T>
 class MemoryBase
 {
@@ -37,6 +43,9 @@ class MemoryBase
 template <class T>
 class MemDbgrStatic;
 
+/**
+ * All memory types derived from this class have fixed size.
+ */
 template <class T>
 class MemoryStaticBase : public MemoryBase<T>
 {
@@ -59,6 +68,10 @@ class MemoryStaticBase : public MemoryBase<T>
     friend class MemDbgrStatic<T>;
 };
 
+/**
+ * No checks for accessing memory out of the storage array.
+ * Fixed size.
+ */
 template <class T>
 class MemoryStaticUnsafe : public MemoryStaticBase<T>
 {
@@ -70,6 +83,11 @@ class MemoryStaticUnsafe : public MemoryStaticBase<T>
     virtual void dec_ptr() override;
 };
 
+/**
+ * Throws std::out_of_range when trying to decrement pointer to the first
+ * element or increment pointer to the last element.
+ * Fixed size.
+ */
 template <class T>
 class MemoryStaticSafe : public MemoryStaticBase<T>
 {
@@ -81,6 +99,11 @@ class MemoryStaticSafe : public MemoryStaticBase<T>
     virtual void dec_ptr() override;
 };
 
+/**
+ * Decrementing pointer to the first element goes to the last one and vice
+ * versa.
+ * Fixed size.
+ */
 template <class T>
 class MemoryStaticLoop : public MemoryStaticBase<T>
 {
@@ -95,6 +118,12 @@ class MemoryStaticLoop : public MemoryStaticBase<T>
 template <class T>
 class MemDbgrDynamic;
 
+/**
+ * Dynamic size.
+ * Incrementing pointer to the last element increases the size of this memory.
+ * Throws std::out_of_range when trying to decrement pointer to the first
+ * element.
+ */
 template <class T>
 class MemoryDynamic : public MemoryBase<T>
 {
@@ -116,6 +145,16 @@ class MemoryDynamic : public MemoryBase<T>
     friend class MemDbgrDynamic<T>;
 };
 
+// #############################################################################
+// #############################################################################
+// #### MEMORY DEBUGGER ########################################################
+// #############################################################################
+// #############################################################################
+
+/**
+ * Classes derrived from this class provide additional access to data stored
+ * in memory classes. These are used for debugging BF programs.
+ */
 template <class T>
 class MemDbgrBase
 {
@@ -152,12 +191,24 @@ class MemDbgrDynamic : public MemDbgrBase<T>
     virtual T &get_ref(std::size_t index) override;
 };
 
+// #############################################################################
+// #############################################################################
+// #### MEMORY FACTORY #########################################################
+// #############################################################################
+// #############################################################################
+
+/**
+ * Enumaration representing supported memory data types
+ */
 enum class MemDataType
 {
     bit8,
     bit16,
 };
 
+/**
+ * Types of memory classes.
+ */
 enum class MemoryType
 {
     none,
@@ -167,6 +218,9 @@ enum class MemoryType
     dynamic,
 };
 
+/**
+ * Factory class for creating memory objects with or without attached debugger.
+ */
 class MemFactory
 {
  private:
