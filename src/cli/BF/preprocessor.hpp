@@ -9,6 +9,12 @@
 
 namespace BF
 {
+/**
+ * This class holds pointers to functions used for checking and preprocessing
+ * BF code.
+ * Once set up, you can use these functions without knowing, which exact
+ * function is used as back-end for the operation.
+ */
 class Preprocessor
 {
  protected:
@@ -26,12 +32,26 @@ class Preprocessor
 
 namespace check
 {
+/**
+ * Check if all square brackets are in pairs.
+ * Stops and throws error on first recognised problem.
+ */
 void standard(const Program::container &prog);
 } // namespace check
 
 namespace prep
 {
+/**
+ * Does nothing.
+ * Used as preprocessing function if no preprocessing should be done.
+ */
 void noop(Program::container &, bool);
+
+/**
+ * Removes all symbols that are not used by BF language. (symbols that are NOT
+ * removed: +-<>[].,)
+ * If `keep_debug` is true, vertical line symbol (|) is also kept.
+ */
 void remove_unused(Program::container &prog, bool keep_debug);
 } // namespace prep
 

@@ -16,6 +16,9 @@ namespace BF
 // #############################################################################
 // #############################################################################
 
+/**
+ * This class defines interface for all memory classes.
+ */
 template <class T>
 class MemoryBase
 {
