@@ -13,6 +13,12 @@ void Interpreter<T>::run_()
 }
 
 template <class T>
+void Interpreter<T>::register_handler(unsigned char command, fptr function)
+{
+    this->function_table[command] = function;
+}
+
+template <class T>
 void Interpreter<T>::plus_sign_(BF::Interpreter<T> *inter)
 {
     inter->mem->inc_val();
@@ -123,18 +129,17 @@ Interpreter<T>::Interpreter(std::ostream &os, std::istream &is,
     this->function_table = new fptr[this->function_table_size];
     for (int i = 0; i < this->function_table_size; i++)
     {
-        this->function_table[i] = &Interpreter<T>::noop_;
+        this->register_handler(i, &Interpreter<T>::noop_);
     }
 
-    this->function_table[(unsigned)'+'] = &Interpreter<T>::plus_sign_;
-    this->function_table[(unsigned)'-'] = &Interpreter<T>::minus_sign_;
-    this->function_table[(unsigned)'.'] = &Interpreter<T>::dot_;
-    this->function_table[(unsigned)','] = &Interpreter<T>::comma_;
-    this->function_table[(unsigned)'<'] = &Interpreter<T>::less_than_sign_;
-    this->function_table[(unsigned)'>'] = &Interpreter<T>::greater_than_sign_;
-    this->function_table[(unsigned)'['] = &Interpreter<T>::left_square_bracket_;
-    this->function_table[(unsigned)']'] =
-        &Interpreter<T>::right_square_bracket_;
+    this->register_handler('+', &Interpreter<T>::plus_sign_);
+    this->register_handler('-', &Interpreter<T>::minus_sign_);
+    this->register_handler('.', &Interpreter<T>::dot_);
+    this->register_handler(',', &Interpreter<T>::comma_);
+    this->register_handler('<', &Interpreter<T>::less_than_sign_);
+    this->register_handler('>', &Interpreter<T>::greater_than_sign_);
+    this->register_handler('[', &Interpreter<T>::left_square_bracket_);
+    this->register_handler(']', &Interpreter<T>::right_square_bracket_);
 }
 
 template <class T>
@@ -481,9 +486,9 @@ DebugInterpreter<T>::DebugInterpreter(std::ostream &os, std::istream &is,
         throw std::exception();
     }
 
-    this->function_table[(unsigned)'.'] = &DebugInterpreter::debug_dot_;
-    this->function_table[(unsigned)','] = &DebugInterpreter::debug_comma_;
-    this->function_table[(unsigned)'|'] = &DebugInterpreter::vertical_line_;
+    this->register_handler('.', &DebugInterpreter::debug_dot_);
+    this->register_handler(',', &DebugInterpreter::debug_comma_);
+    this->register_handler('|', &DebugInterpreter::vertical_line_);
 }
 
 template <class T>
