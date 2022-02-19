@@ -1,14 +1,17 @@
 # print prefix
 PRINT := [MAIN]:
 
-MAKE_TARGET := all
+MAKE_TARGET :=
 debug:    MAKE_TARGET := debug
 clean:    MAKE_TARGET := clean
 cleanall: MAKE_TARGET := cleanall
 
 .PHONY: all cli gui debug clean cleanall
 
-all: cli gui
+TASKS := cli
+# TASKS += gui
+
+all: $(TASKS)
 	@echo \
 ################################################################################\
 & echo \
