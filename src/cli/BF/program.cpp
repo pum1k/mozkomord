@@ -14,7 +14,7 @@ void Program::set(const container &prog) { this->prog = prog; }
 
 void Program::load(const std::string &file)
 {
-    std::ifstream in(file, std::ios::in | std::ios::binary);
+    std::ifstream in(file, std::ios::in);
     if (!in)
     {
         throw load_file_error(file);

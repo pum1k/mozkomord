@@ -294,6 +294,7 @@ void DebugInterpreter<T>::print_context(int size)
     if (front_ellipsis)
     {
         os << "(...)";
+        pos += 5;
     }
 
     for (auto it = this->inst_ptr - front; it < this->inst_ptr; ++it)
