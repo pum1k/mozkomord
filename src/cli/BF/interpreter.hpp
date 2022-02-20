@@ -63,10 +63,9 @@ class Interpreter : public InterpreterBase
     // this function reads the program and calls functions from function_table
     void run_();
 
-    // this struct is thrown when one level of run_ recursion should return
-    struct return_one_level
-    {
-    };
+    // when set to true, one level of `run_` recursion will return and this will
+    // be set back to false
+    bool return_one_level;
 
     // set function to the specified index of function_table
     void register_handler(unsigned char command, fptr function);
@@ -83,7 +82,7 @@ class Interpreter : public InterpreterBase
     static void less_than_sign_(BF::Interpreter<T> *inter);
     static void greater_than_sign_(BF::Interpreter<T> *inter);
     static void left_square_bracket_(BF::Interpreter<T> *inter);
-    static void right_square_bracket_(BF::Interpreter<T> * /* inter */);
+    static void right_square_bracket_(BF::Interpreter<T> *inter);
 
  public:
     Interpreter(std::ostream &os, std::istream &is, MemoryBase<T> *mem);

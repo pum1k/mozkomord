@@ -6,10 +6,12 @@ template <class T>
 void Interpreter<T>::run_()
 {
     const auto end = this->prog_end;
-    for (; this->inst_ptr < end; ++inst_ptr)
+    for (; (!this->return_one_level) && (this->inst_ptr < end); ++inst_ptr)
     {
         (this->function_table[(*this->inst_ptr)])(this);
     }
+
+    this->return_one_level = false;
 }
 
 template <class T>
@@ -90,15 +92,11 @@ void Interpreter<T>::left_square_bracket_(BF::Interpreter<T> *inter)
         do
         {
             inter->inst_ptr = tmp + 1;
-            try
-            {
-                inter->run_();
-            }
-            catch (const return_one_level &)
-            {
-            }
 
+            inter->run_();
         } while (inter->mem->ref() != 0);
+
+        --inter->inst_ptr;
     }
     else
     {
@@ -116,15 +114,18 @@ void Interpreter<T>::left_square_bracket_(BF::Interpreter<T> *inter)
 }
 
 template <class T>
-void Interpreter<T>::right_square_bracket_(BF::Interpreter<T> * /* inter */)
+void Interpreter<T>::right_square_bracket_(BF::Interpreter<T> *inter)
 {
-    throw return_one_level{};
+    inter->return_one_level = true;
 }
 
 template <class T>
 Interpreter<T>::Interpreter(std::ostream &os, std::istream &is,
                             MemoryBase<T> *mem)
-    : InterpreterBase(os, is), mem(mem), function_table_size(256)
+    : InterpreterBase(os, is),
+      mem(mem),
+      function_table_size(256),
+      return_one_level(false)
 {
     this->function_table = new fptr[this->function_table_size];
     for (int i = 0; i < this->function_table_size; i++)
