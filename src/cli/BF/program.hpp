@@ -12,7 +12,8 @@ namespace BF
 class Program
 {
  public:
-    using container = std::vector<unsigned char>;
+    using value_type = unsigned char;
+    using container  = std::vector<value_type>;
 
  private:
     container prog;

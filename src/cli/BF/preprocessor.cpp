@@ -84,6 +84,19 @@ void remove_unused(Program::container &prog, bool keep_debug)
 
     prog.erase(std::remove_if(prog.begin(), prog.end(), pred), prog.end());
 }
+
+void optimize(Program::container &prog, bool keep_debug)
+{
+    remove_unused(prog, keep_debug);
+
+    std::list<Program::value_type> prog_l(prog.begin(), prog.end());
+
+    optimizers::remove_consecutive_operations(prog_l);
+
+    prog.resize(prog_l.size());
+    std::copy(prog_l.begin(), prog_l.end(), prog.begin());
+}
+
 } // namespace prep
 
 } // namespace BF

@@ -143,6 +143,20 @@ class DebugInterpreter : public Interpreter<T>
     virtual bool run(const Program::container &prog) override;
 };
 
+template <class T>
+class OptimizedInterpreter : public Interpreter<T>
+{
+ protected:
+    static void multi_value_inc_(BF::Interpreter<T> *inter);
+    static void multi_value_dec_(BF::Interpreter<T> *inter);
+    static void multi_memptr_inc_(BF::Interpreter<T> *inter);
+    static void multi_memptr_dec_(BF::Interpreter<T> *inter);
+
+ public:
+    OptimizedInterpreter(std::ostream &os, std::istream &is,
+                         MemoryBase<T> *mem);
+};
+
 enum class InterClass
 {
     none,

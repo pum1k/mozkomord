@@ -41,6 +41,8 @@ class MemoryBase
     virtual void inc_ptr() = 0;
     virtual void dec_ptr() = 0;
     virtual T &ref()       = 0;
+
+    virtual void move_ptr(std::ptrdiff_t distance) = 0;
 };
 
 template <class T>
@@ -84,6 +86,8 @@ class MemoryStaticUnsafe : public MemoryStaticBase<T>
 
     virtual void inc_ptr() override;
     virtual void dec_ptr() override;
+
+    virtual void move_ptr(std::ptrdiff_t distance) override;
 };
 
 /**
@@ -100,6 +104,8 @@ class MemoryStaticSafe : public MemoryStaticBase<T>
 
     virtual void inc_ptr() override;
     virtual void dec_ptr() override;
+
+    virtual void move_ptr(std::ptrdiff_t distance) override;
 };
 
 /**
@@ -116,6 +122,8 @@ class MemoryStaticLoop : public MemoryStaticBase<T>
 
     virtual void inc_ptr() override;
     virtual void dec_ptr() override;
+
+    virtual void move_ptr(std::ptrdiff_t distance) override;
 };
 
 template <class T>
@@ -144,6 +152,8 @@ class MemoryDynamic : public MemoryBase<T>
     virtual void inc_ptr() override;
     virtual void dec_ptr() override;
     virtual T &ref() override;
+
+    virtual void move_ptr(std::ptrdiff_t distance) override;
 
     friend class MemDbgrDynamic<T>;
 };

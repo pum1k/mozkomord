@@ -3,8 +3,10 @@
 
 #include <algorithm>
 #include <functional>
+#include <list>
 
 #include "except.hpp"
+#include "optimizer.hpp"
 #include "program.hpp"
 
 namespace BF
@@ -49,10 +51,12 @@ void noop(Program::container &, bool);
 
 /**
  * Removes all symbols that are not used by BF language. (symbols that are NOT
- * removed: +-<>[].,)
+ * removed: +-<>[]., )
  * If `keep_debug` is true, vertical line symbol (|) is also kept.
  */
 void remove_unused(Program::container &prog, bool keep_debug);
+
+void optimize(Program::container &prog, bool keep_debug);
 } // namespace prep
 
 } // namespace BF

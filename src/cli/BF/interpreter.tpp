@@ -507,6 +507,58 @@ bool DebugInterpreter<T>::run(const Program::container &prog)
 }
 
 template <class T>
+void OptimizedInterpreter<T>::multi_value_inc_(BF::Interpreter<T> *inter)
+{
+    OptimizedInterpreter *o_inter =
+        static_cast<OptimizedInterpreter<T> *>(inter);
+
+    o_inter->mem->ref() += prog_to_uint(o_inter->inst_ptr);
+}
+
+template <class T>
+void OptimizedInterpreter<T>::multi_value_dec_(BF::Interpreter<T> *inter)
+{
+    OptimizedInterpreter *o_inter =
+        static_cast<OptimizedInterpreter<T> *>(inter);
+
+    o_inter->mem->ref() -= prog_to_uint(o_inter->inst_ptr);
+}
+
+template <class T>
+void OptimizedInterpreter<T>::multi_memptr_inc_(BF::Interpreter<T> *inter)
+{
+    OptimizedInterpreter *o_inter =
+        static_cast<OptimizedInterpreter<T> *>(inter);
+
+    o_inter->mem->move_ptr(prog_to_uint(o_inter->inst_ptr));
+}
+
+template <class T>
+void OptimizedInterpreter<T>::multi_memptr_dec_(BF::Interpreter<T> *inter)
+{
+    OptimizedInterpreter *o_inter =
+        static_cast<OptimizedInterpreter<T> *>(inter);
+
+    o_inter->mem->move_ptr(-prog_to_uint(o_inter->inst_ptr));
+}
+
+template <class T>
+OptimizedInterpreter<T>::OptimizedInterpreter(std::ostream &os,
+                                              std::istream &is,
+                                              MemoryBase<T> *mem)
+    : Interpreter<T>(os, is, mem)
+{
+    this->register_handler(BF::optimizers::op_multi_inc,
+                           &OptimizedInterpreter::multi_value_inc_);
+    this->register_handler(BF::optimizers::op_multi_dec,
+                           &OptimizedInterpreter::multi_value_dec_);
+    this->register_handler(BF::optimizers::op_multi_ptr_inc,
+                           &OptimizedInterpreter::multi_memptr_inc_);
+    this->register_handler(BF::optimizers::op_multi_ptr_dec,
+                           &OptimizedInterpreter::multi_memptr_dec_);
+}
+
+template <class T>
 InterpreterBase *InterFactory::new_inter_standard(std::ostream &os,
                                                   std::istream &is)
 {

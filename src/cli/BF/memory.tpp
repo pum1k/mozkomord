@@ -71,6 +71,12 @@ void MemoryStaticUnsafe<T>::dec_ptr()
     --(this->ptr);
 }
 
+template <class T>
+void MemoryStaticUnsafe<T>::move_ptr(std::ptrdiff_t distance)
+{
+    this->ptr += distance;
+}
+
 // #############################################################################
 // #### STATIC SAFE ############################################################
 // #############################################################################
@@ -99,6 +105,24 @@ void MemoryStaticSafe<T>::dec_ptr()
     --(this->ptr);
 }
 
+template <class T>
+void MemoryStaticSafe<T>::move_ptr(std::ptrdiff_t distance)
+{
+    if (distance < (this->arr - this->ptr))
+    {
+        throw std::out_of_range(
+            "Decrementing pointer to the first element in the memory not "
+            "allowed on type. Try using a different memory type.");
+    }
+    else if (distance >= ((this->arr + this->size_) - this->ptr))
+    {
+        throw std::out_of_range(
+            "Incrementing past the end of memory not allowed on this type. "
+            "Try increasing the size of memory or using a different type.");
+    }
+    this->ptr += distance;
+}
+
 // #############################################################################
 // #### STATIC LOOP ############################################################
 // #############################################################################
@@ -123,6 +147,20 @@ void MemoryStaticLoop<T>::dec_ptr()
         return;
     }
     --(this->ptr);
+}
+
+template <class T>
+void MemoryStaticLoop<T>::move_ptr(std::ptrdiff_t distance)
+{
+    while (distance < (this->arr - this->ptr))
+    {
+        distance += this->size_;
+    }
+    while (distance >= ((this->arr + this->size_) - this->ptr))
+    {
+        this->ptr -= this->size_;
+    }
+    this->ptr += distance;
 }
 
 // #############################################################################
@@ -188,6 +226,23 @@ template <class T>
 T &MemoryDynamic<T>::ref()
 {
     return this->vec[this->index];
+}
+
+template <class T>
+void MemoryDynamic<T>::move_ptr(std::ptrdiff_t distance)
+{
+    if (distance < (-static_cast<std::ptrdiff_t>(this->index)))
+    {
+        throw std::out_of_range(
+            "Decrementing pointer to the first element in the memory not "
+            "allowed on type. Try using a different memory type.");
+    }
+    else if (distance >= (static_cast<std::ptrdiff_t>(this->vec.size()) -
+                          static_cast<std::ptrdiff_t>(this->index)))
+    {
+        this->vec.resize(this->index + 1 + distance);
+    }
+    this->index += distance;
 }
 
 // #############################################################################
