@@ -581,6 +581,16 @@ InterpreterBase *InterFactory::new_inter_standard_debug(std::ostream &os,
 
     return rv;
 }
+template <class T>
+InterpreterBase *InterFactory::new_inter_optimized(std::ostream &os,
+                                                   std::istream &is)
+{
+    InterpreterBase *rv = nullptr;
+    DEBUG_PRINT("[InterFactory]: Creating optimized interpreter");
+    rv = new OptimizedInterpreter<T>(os, is, this->mem_factory->new_mem<T>());
+
+    return rv;
+}
 
 inline InterFactory::InterFactory()
     : inter_class(InterClass::none), mem_factory(nullptr)
@@ -618,8 +628,13 @@ InterpreterBase *InterFactory::new_inter(std::ostream &os, std::istream &is)
         rv = this->new_inter_standard_debug<T>(os, is);
         break;
 
+    case InterClass::optimized:
+        rv = this->new_inter_optimized<T>(os, is);
+        break;
+
     case InterClass::none:
     default:
+        throw inter_type_error();
         break;
     }
 

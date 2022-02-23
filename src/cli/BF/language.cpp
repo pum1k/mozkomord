@@ -10,6 +10,7 @@ void LangBF::print_help(const char *prog_name)
 void LangBF::process_options()
 {
     // File
+    // This option is queried later in the program
     if (this->default_s == this->parser.get_string("file"))
     {
         throw options_error(
@@ -56,6 +57,16 @@ void LangBF::process_options()
     {
         throw options_error("Invalid value for \"--cell-size\" option.");
     }
+
+    // Optimizations
+    // This option is queried later in the program
+    // if both debugging and optimiyations are enabled, throw error
+    if (this->parser.get_flag("debug") && this->parser.get_flag("optimize"))
+    {
+        throw options_error(
+            "Debugging and optimizations cannot be enabled both at the same "
+            "time.");
+    }
 }
 
 void LangBF::setup_program()
@@ -71,6 +82,10 @@ void LangBF::setup_preprocessor()
     {
         this->prep.set_process(BF::prep::noop);
     }
+    else if (this->parser.get_flag("optimize"))
+    {
+        this->prep.set_process(BF::prep::optimize);
+    }
     else
     {
         this->prep.set_process(BF::prep::remove_unused);
@@ -85,6 +100,8 @@ void LangBF::setup_interpreter()
 
     if (this->parser.get_flag("debug"))
         this->inter_fact.set_inter_class(BF::InterClass::standard_debug);
+    else if (this->parser.get_flag("optimize"))
+        this->inter_fact.set_inter_class(BF::InterClass::optimized);
     else
         this->inter_fact.set_inter_class(BF::InterClass::standard);
 
@@ -108,7 +125,7 @@ LangBF::LangBF()
           {"file",
            {"-f", "--file"},
            argp::OptionType::STRING,
-           "Load program from this file. (REQUIRED)"},
+           "Load program from this file. (REQUIRED)\n"},
           // Memory type
           {"mem-type",
            {"--mem-type"},
@@ -128,20 +145,31 @@ LangBF::LangBF()
            "Set memory size for the interpreted program.\n"
            "      Default: 30 000.\n"
            "      This option is ignored when using dynamic memory. "
-           "(However, it will cause an error if set to invalid value.)"},
+           "(However, it will cause an error if set to invalid value.)\n"},
           // Debug mode
           {"debug",
            {"--debug"},
            argp::OptionType::FLAG,
-           "Run with debugging. (Breakpoint symbol \"|\")"},
+           "Run with debugging. (Breakpoint symbol \"|\")\n"},
           // Mem cell size
           {"cell-size",
            {"--cell-size"},
            argp::OptionType::INT,
            "Set number of bits for every stack entry.\n"
-           "      Allowed values: 8 (default), 16"},
+           "      Allowed values: 8 (default), 16\n"},
+          // Optimizations
+          {"optimize",
+           {"--optimize"},
+           argp::OptionType::FLAG,
+           "When this option is selected, preprocessor will try to optimize "
+           "the program.\n"
+           "      Warning: This option cannot be used when debugging is "
+           "enabled.\n"},
           // Help
-          {"help", {"-h", "--help"}, argp::OptionType::FLAG, "Show this help."},
+          {"help",
+           {"-h", "--help"},
+           argp::OptionType::FLAG,
+           "Show this help.\n"},
       })
 {
     this->default_b = false;

@@ -162,6 +162,7 @@ enum class InterClass
     none,
     standard,
     standard_debug,
+    optimized,
 };
 
 class InterFactory
@@ -175,6 +176,8 @@ class InterFactory
     template <class T>
     InterpreterBase *new_inter_standard_debug(std::ostream &os,
                                               std::istream &is);
+    template <class T>
+    InterpreterBase *new_inter_optimized(std::ostream &os, std::istream &is);
 
  public:
     InterFactory();

@@ -56,8 +56,13 @@ class load_file_error : public std::exception
 class mem_type_error : public std::bad_alloc
 {
  private:
-    std::string msg;
+ public:
+    virtual const char *what() const noexcept override;
+};
 
+class inter_type_error : public std::bad_alloc
+{
+ private:
  public:
     virtual const char *what() const noexcept override;
 };
