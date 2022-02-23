@@ -4,7 +4,7 @@
 # Config =======================================================================
 # Compilation settings ---------------------------------------------------------
 CXX      := g++
-CXXFLAGS := -std=c++17 -Wall -Wextra
+CXXFLAGS := -std=c++17 -Wall -Wextra -Wswitch-enum
 LDFLAGS  := 
 LDLIBS   :=
 debug: CXXFLAGS += -g -DDEBUG
