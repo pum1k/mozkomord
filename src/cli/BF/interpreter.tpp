@@ -52,8 +52,7 @@ inline void Interpreter<uint8_t>::comma_(BF::Interpreter<uint8_t> *inter)
     int c = inter->is.get();
     if (c == std::istream::traits_type::eof())
     {
-        // TODO: Add error message
-        throw std::exception();
+        throw std::runtime_error(strings::prog_read_input_error);
     }
     inter->mem->ref() = c;
 }
@@ -65,8 +64,7 @@ inline void Interpreter<uint16_t>::comma_(BF::Interpreter<uint16_t> *inter)
     int c = inter->is.get();
     if (c == std::istream::traits_type::eof())
     {
-        // TODO: Add error message
-        throw std::exception();
+        throw std::runtime_error(strings::prog_read_input_error);
     }
     inter->mem->ref() = c;
 }
@@ -127,6 +125,11 @@ Interpreter<T>::Interpreter(std::ostream &os, std::istream &is,
       function_table_size(256),
       return_one_level(false)
 {
+    if (this->mem == nullptr)
+    {
+        throw std::invalid_argument(strings::mem_ptr_null_error);
+    }
+
     this->function_table = new fptr[this->function_table_size];
     for (int i = 0; i < this->function_table_size; i++)
     {
@@ -476,16 +479,15 @@ template <class T>
 DebugInterpreter<T>::DebugInterpreter(std::ostream &os, std::istream &is,
                                       MemoryBase<T> *mem,
                                       MemDbgrBase<T> *mem_dbgr)
-    : Interpreter<T>(fake_os, fake_is, mem), real_os(os), real_is(is)
+    : Interpreter<T>(fake_os, fake_is, mem),
+      mem_dbgr(mem_dbgr),
+      real_os(os),
+      real_is(is)
 {
-    if (mem_dbgr != nullptr)
+    if (this->mem_dbgr == nullptr)
     {
-        this->mem_dbgr = mem_dbgr;
-    }
-    else
-    {
-        // TODO: Add error message
-        throw std::exception();
+        throw std::invalid_argument(
+            "Memory debugger pointer cannot be nullptr.");
     }
 
     this->register_handler('.', &DebugInterpreter::debug_dot_);
@@ -614,8 +616,9 @@ InterpreterBase *InterFactory::new_inter(std::ostream &os, std::istream &is)
 
     if (this->mem_factory == nullptr)
     {
-        // TODO: Add error message
-        throw std::exception();
+        throw std::logic_error(
+            "Cannot create new interpreter instance because memory factory is "
+            "not set.");
     }
 
     switch (this->inter_class)

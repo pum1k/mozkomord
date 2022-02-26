@@ -86,9 +86,7 @@ void MemoryStaticSafe<T>::inc_ptr()
 {
     if (static_cast<std::size_t>(this->ptr - this->arr) == (this->size_ - 1))
     {
-        throw std::out_of_range(
-            "Incrementing past the end of memory not allowed on this type. "
-            "Try increasing the size of memory or using a different type.");
+        throw std::out_of_range(strings::incremet_error);
     }
     ++(this->ptr);
 }
@@ -98,9 +96,7 @@ void MemoryStaticSafe<T>::dec_ptr()
 {
     if (this->ptr == this->arr)
     {
-        throw std::out_of_range(
-            "Decrementing pointer to the first element in the memory not "
-            "allowed on type. Try using a different memory type.");
+        throw std::out_of_range(strings::decrement_error);
     }
     --(this->ptr);
 }
@@ -110,15 +106,11 @@ void MemoryStaticSafe<T>::move_ptr(std::ptrdiff_t distance)
 {
     if (distance < (this->arr - this->ptr))
     {
-        throw std::out_of_range(
-            "Decrementing pointer to the first element in the memory not "
-            "allowed on type. Try using a different memory type.");
+        throw std::out_of_range(strings::decrement_error);
     }
     else if (distance >= ((this->arr + this->size_) - this->ptr))
     {
-        throw std::out_of_range(
-            "Incrementing past the end of memory not allowed on this type. "
-            "Try increasing the size of memory or using a different type.");
+        throw std::out_of_range(strings::incremet_error);
     }
     this->ptr += distance;
 }
@@ -214,9 +206,7 @@ void MemoryDynamic<T>::dec_ptr()
 {
     if (this->index == 0)
     {
-        throw std::out_of_range(
-            "Decrementing pointer to the first element in the memory not "
-            "allowed on type. Try using a different memory type.");
+        throw std::out_of_range(strings::decrement_error);
     }
 
     --(this->index);
@@ -233,9 +223,7 @@ void MemoryDynamic<T>::move_ptr(std::ptrdiff_t distance)
 {
     if (distance < (-static_cast<std::ptrdiff_t>(this->index)))
     {
-        throw std::out_of_range(
-            "Decrementing pointer to the first element in the memory not "
-            "allowed on type. Try using a different memory type.");
+        throw std::out_of_range(strings::decrement_error);
     }
     else if (distance >= (static_cast<std::ptrdiff_t>(this->vec.size()) -
                           static_cast<std::ptrdiff_t>(this->index)))
@@ -254,17 +242,13 @@ void MemoryDynamic<T>::move_ptr(std::ptrdiff_t distance)
 // #############################################################################
 // #### MEMORY DEBUGGER for static memory ######################################
 // #############################################################################
+
 template <class T>
-MemDbgrStatic<T>::MemDbgrStatic(MemoryStaticBase<T> *mem)
+MemDbgrStatic<T>::MemDbgrStatic(MemoryStaticBase<T> *mem) : mem(mem)
 {
-    if (mem != nullptr)
+    if (this->mem == nullptr)
     {
-        this->mem = mem;
-    }
-    else
-    {
-        // TODO: Add error message
-        throw std::exception();
+        throw std::invalid_argument(strings::mem_ptr_null_error);
     }
 }
 
@@ -283,8 +267,8 @@ T &MemDbgrStatic<T>::get_ref(std::size_t index)
     }
     else
     {
-        // TODO: Add error message
-        throw std::exception();
+        throw std::out_of_range(std::string(strings::mem_index_error) +
+                                std::to_string(index));
     }
 }
 
@@ -293,16 +277,11 @@ T &MemDbgrStatic<T>::get_ref(std::size_t index)
 // #############################################################################
 
 template <class T>
-MemDbgrDynamic<T>::MemDbgrDynamic(MemoryDynamic<T> *mem)
+MemDbgrDynamic<T>::MemDbgrDynamic(MemoryDynamic<T> *mem) : mem(mem)
 {
-    if (mem != nullptr)
+    if (this->mem == nullptr)
     {
-        this->mem = mem;
-    }
-    else
-    {
-        // TODO: Add error message
-        throw std::exception();
+        throw std::invalid_argument(strings::mem_ptr_null_error);
     }
 }
 
@@ -315,7 +294,15 @@ std::size_t MemDbgrDynamic<T>::get_current_size()
 template <class T>
 T &MemDbgrDynamic<T>::get_ref(std::size_t index)
 {
-    return this->mem->vec[index];
+    if (index >= 0 && index < this->get_current_size())
+    {
+        return this->mem->vec[index];
+    }
+    else
+    {
+        throw std::out_of_range(std::string(strings::mem_index_error) +
+                                std::to_string(index));
+    }
 }
 
 // #############################################################################

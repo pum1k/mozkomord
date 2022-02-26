@@ -3,10 +3,12 @@
 
 #include <algorithm>
 #include <stdexcept>
+#include <string>
 #include <vector>
 
 #include "../../common/debugprint.hpp"
 #include "except.hpp"
+#include "strings.hpp"
 
 namespace BF
 {

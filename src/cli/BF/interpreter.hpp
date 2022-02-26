@@ -8,12 +8,14 @@
 #include <istream>
 #include <ostream>
 #include <sstream>
+#include <stdexcept>
 
 #include "../../common/debugprint.hpp"
 #include "../language.hpp"
 #include "memory.hpp"
 #include "preprocessor.hpp"
 #include "program.hpp"
+#include "strings.hpp"
 
 namespace BF
 {

@@ -60,7 +60,7 @@ void LangBF::process_options()
 
     // Optimizations
     // This option is queried later in the program
-    // if both debugging and optimiyations are enabled, throw error
+    // if both debugging and optimizations are enabled, throw error
     if (this->parser.get_flag("debug") && this->parser.get_flag("optimize"))
     {
         throw options_error(
@@ -246,12 +246,7 @@ void LangBF::run()
 try
 {
 #ifdef DEBUG
-    std::cout << "[LangBF]: This program will be run:\n";
-    for (auto c : this->prog.get_const())
-    {
-        std::cout << c;
-    }
-    std::cout << "\n#### End of program." << std::endl;
+    DEBUG_PRINT("[LangBF]: Running the program.");
 #endif // DEBUG
     this->inter->run(this->prog);
 }
