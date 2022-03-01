@@ -86,7 +86,7 @@ void MemoryStaticSafe<T>::inc_ptr()
 {
     if (static_cast<std::size_t>(this->ptr - this->arr) == (this->size_ - 1))
     {
-        throw std::out_of_range(strings::incremet_error);
+        throw std::out_of_range(strings::increment_error);
     }
     ++(this->ptr);
 }
@@ -110,7 +110,7 @@ void MemoryStaticSafe<T>::move_ptr(std::ptrdiff_t distance)
     }
     else if (distance >= ((this->arr + this->size_) - this->ptr))
     {
-        throw std::out_of_range(strings::incremet_error);
+        throw std::out_of_range(strings::increment_error);
     }
     this->ptr += distance;
 }

@@ -9,7 +9,7 @@ namespace BF
 {
 namespace strings
 {
-inline constexpr const char *incremet_error =
+inline constexpr const char *increment_error =
     "Incrementing pointer to the last element in the memory is not allowed for "
     "this type of memory. "
     "Try increasing the size of the memory or using a different memory type.";
