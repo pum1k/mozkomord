@@ -2,6 +2,7 @@
 
 namespace BF
 {
+
 template <class iterator,
           std::enable_if_t<std::is_same_v<typename iterator::value_type,
                                           Program::value_type>,

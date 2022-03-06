@@ -34,15 +34,18 @@ class Preprocessor
 
 namespace check
 {
+
 /**
  * Check if all square brackets are in pairs.
  * Stops and throws error on first recognised problem.
  */
 void standard(const Program::container &prog);
+
 } // namespace check
 
 namespace prep
 {
+
 /**
  * Does nothing.
  * Used as preprocessing function if no preprocessing should be done.
@@ -57,6 +60,7 @@ void noop(Program::container &, bool);
 void remove_unused(Program::container &prog, bool keep_debug);
 
 void optimize(Program::container &prog, bool keep_debug);
+
 } // namespace prep
 
 } // namespace BF

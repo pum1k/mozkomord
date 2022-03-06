@@ -7,6 +7,7 @@
 
 namespace BF
 {
+
 // `uint_to_prog` and `prog_to_uint` iterator & argument must be iterator
 // reference
 // it can be used with std::vector, std::list, etc.
@@ -25,6 +26,7 @@ uint16_t prog_to_uint(iterator &inst_ptr);
 
 namespace optimizers
 {
+
 enum : unsigned char
 {
     op_multi_inc = 128,

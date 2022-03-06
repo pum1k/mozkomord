@@ -2,8 +2,10 @@
 
 namespace BF
 {
+
 namespace optimizers
 {
+
 void replace_consecutive_operations_with_command(
     Program::value_type prev, int streak,
     std::list<Program::value_type> &prog_l,
@@ -32,6 +34,7 @@ void replace_consecutive_operations_with_command(
     ++streak_begin_it;
     prog_l.erase(streak_begin_it, it);
 }
+
 void remove_consecutive_operations(std::list<Program::value_type> &prog_l)
 {
     using iter_t = std::list<Program::value_type>::iterator;

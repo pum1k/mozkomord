@@ -7,8 +7,10 @@
 
 namespace BF
 {
+
 namespace strings
 {
+
 inline constexpr const char *increment_error =
     "Incrementing pointer to the last element in the memory is not allowed for "
     "this type of memory. "

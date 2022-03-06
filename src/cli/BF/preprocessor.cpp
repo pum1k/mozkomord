@@ -2,6 +2,7 @@
 
 namespace BF
 {
+
 void Preprocessor::set_check(
     const std::function<void(const Program::container &)> &func)
 {
@@ -23,6 +24,7 @@ void Preprocessor::process(Program &prog, bool keep_debug /* = true */)
 
 namespace check
 {
+
 void standard(const Program::container &prog)
 {
     int opening_bracket_count = 0;
@@ -55,10 +57,12 @@ void standard(const Program::container &prog)
         throw missing_bracket_error();
     }
 }
+
 } // namespace check
 
 namespace prep
 {
+
 void noop(Program::container &, bool) {}
 
 void remove_unused(Program::container &prog, bool keep_debug)

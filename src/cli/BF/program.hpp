@@ -9,6 +9,7 @@
 
 namespace BF
 {
+
 class Program
 {
  public:

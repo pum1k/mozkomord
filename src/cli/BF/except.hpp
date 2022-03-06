@@ -1,3 +1,8 @@
+/**
+ * This file defines exceptions used by other BF classes/functions.
+ * All of these exceptions inherit (possibly indirectly) from std::exception.
+ */
+
 #ifndef CLI_BF_EXCEPT_HPP_
 #define CLI_BF_EXCEPT_HPP_
 
@@ -7,6 +12,10 @@
 
 namespace BF
 {
+
+/**
+ * Base class for exceptions caused by BF syntax error.
+ */
 class syntax_error : public std::exception
 {
  public:
@@ -16,6 +25,10 @@ class syntax_error : public std::exception
     };
 };
 
+/**
+ * Exception signaling unexpected closing bracket in BF source code.
+ * This class holds line and column number of the place where the error occured.
+ */
 class unexpected_bracket_error : public syntax_error
 {
  private:
@@ -37,12 +50,19 @@ class unexpected_bracket_error : public syntax_error
     const std::pair<int, int> &get_pos() const noexcept { return pos; };
 };
 
+/**
+ * Exception signaling missing closing bracket.
+ * Does not hold any aditional data about the error.
+ */
 class missing_bracket_error : public syntax_error
 {
  public:
     virtual const char *what() const noexcept override;
 };
 
+/**
+ * Exception signaling error while trying to open file.
+ */
 class load_file_error : public std::exception
 {
  private:
@@ -53,6 +73,10 @@ class load_file_error : public std::exception
     virtual const char *what() const noexcept override;
 };
 
+/**
+ * This exception will be thrown by BF memory factory when the requested type is
+ * not valid.
+ */
 class mem_type_error : public std::bad_alloc
 {
  private:
@@ -60,6 +84,10 @@ class mem_type_error : public std::bad_alloc
     virtual const char *what() const noexcept override;
 };
 
+/**
+ * This exception will be thrown by BF interpreter factory when the requested
+ * type is not valid.
+ */
 class inter_type_error : public std::bad_alloc
 {
  private:

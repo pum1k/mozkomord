@@ -2,6 +2,7 @@
 
 namespace BF
 {
+
 void unexpected_bracket_error::init_msg()
 {
     if (!this->has_pos())

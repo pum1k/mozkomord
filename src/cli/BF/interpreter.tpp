@@ -2,6 +2,7 @@
 
 namespace BF
 {
+
 template <class T>
 void Interpreter<T>::run_()
 {

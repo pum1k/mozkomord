@@ -1,3 +1,19 @@
+/**
+ * This file defines interface for all BF interpreters as well as some basic
+ * implementations and factory class for creating them.
+ *
+ * Implemented interpreters:
+ * - Interpreter (namespace BF)
+ *   - inherits from InterpreterBase
+ *   - for standard BF code
+ * - DebugInterpreter (namespace BF)
+ *   - inherits from Interpreter
+ *   - adds support for breakpoints
+ * - OptimizedInterpreter (namespace BF)
+ *   - inherits from Interpreter
+ *   - custom BF bytecode
+ */
+
 #ifndef CLI_BF_INTERPRETER_HPP_
 #define CLI_BF_INTERPRETER_HPP_
 
@@ -19,6 +35,7 @@
 
 namespace BF
 {
+
 /**
  * This class defines interface for interpreter classes.
  */
@@ -43,6 +60,12 @@ class InterpreterBase
     virtual void reset_memory()                      = 0;
 };
 
+/**
+ * Interpreter class can interpret standard BF code.
+ * Subclasses can easily add functionality to ignored characters or overrride
+ * behaviour of the current implementation by registerring differet functions to
+ * the function table.
+ */
 template <class T>
 class Interpreter : public InterpreterBase
 {
@@ -95,6 +118,11 @@ class Interpreter : public InterpreterBase
     virtual void reset_memory() override;
 };
 
+/**
+ * DebugInterpreter overrides IO operations of the Interpreter class and defines
+ * new handler for a breakpoint character.
+ * (Breakpoint character is defined to be vertical line: | ).
+ */
 template <class T>
 class DebugInterpreter : public Interpreter<T>
 {
@@ -145,6 +173,12 @@ class DebugInterpreter : public Interpreter<T>
     virtual bool run(const Program::container &prog) override;
 };
 
+/**
+ * OptimizedInterpreter class keeps all original funtions of its base
+ * Interpreter but adds new functions that handle characters in the custom BF
+ * bytecode. These operations allow the interpreter to do multiple standard BF
+ * operations at once, resulting in performance uplift.
+ */
 template <class T>
 class OptimizedInterpreter : public Interpreter<T>
 {
@@ -159,6 +193,10 @@ class OptimizedInterpreter : public Interpreter<T>
                          MemoryBase<T> *mem);
 };
 
+/**
+ * This enumeration represents interpreter classes supported by the interpreter
+ * factory.
+ */
 enum class InterClass
 {
     none,
@@ -167,6 +205,9 @@ enum class InterClass
     optimized,
 };
 
+/**
+ * Factory class for creating interpreter objects.
+ */
 class InterFactory
 {
  private:

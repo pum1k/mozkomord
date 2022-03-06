@@ -2,6 +2,7 @@
 
 namespace BF
 {
+
 Program::Program(const std::string &prog) { this->set(prog); }
 Program::Program(const container &prog) { this->set(prog); }
 
