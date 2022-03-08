@@ -10,6 +10,10 @@
 namespace BF
 {
 
+/**
+ * This class is responsible for loading and storing the BF program.
+ * It also defins types that are used to store the program.
+ */
 class Program
 {
  public:

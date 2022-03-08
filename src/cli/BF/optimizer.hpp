@@ -27,6 +27,9 @@ uint16_t prog_to_uint(iterator &inst_ptr);
 namespace optimizers
 {
 
+/**
+ * This enum defines values used for optimized BF instructions.
+ */
 enum : unsigned char
 {
     op_multi_inc = 128,
@@ -36,6 +39,10 @@ enum : unsigned char
 
 };
 
+/**
+ * Replaces consecutive operations +-<> with a single instruction that has the
+ * same efect.
+ */
 void remove_consecutive_operations(std::list<Program::value_type> &prog_l);
 
 } // namespace optimizers
