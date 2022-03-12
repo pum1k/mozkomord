@@ -33,14 +33,8 @@ void Interpreter<T>::minus_sign_(BF::Interpreter<T> *inter)
     inter->mem->dec_val();
 }
 
-template <>
-inline void Interpreter<uint8_t>::dot_(BF::Interpreter<uint8_t> *inter)
-{
-    inter->os << inter->mem->ref();
-}
-
-template <>
-inline void Interpreter<uint16_t>::dot_(BF::Interpreter<uint16_t> *inter)
+template <class T>
+void Interpreter<T>::dot_(BF::Interpreter<T> *inter)
 {
     std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
 
@@ -63,6 +57,10 @@ inline void Interpreter<uint8_t>::comma_(BF::Interpreter<uint8_t> *inter)
 }
 
 // This specialization currently works in the same way as the one for uint8_t
+// Reading UTF-8 values is not currently supported because of Windows. When
+// setting input codepage to UTF-8 it sends null characters instead of the UTF-8
+// encoded input.
+// Article about this being broken: https://nullprogram.com/blog/2021/12/30/
 template <>
 inline void Interpreter<uint16_t>::comma_(BF::Interpreter<uint16_t> *inter)
 {
