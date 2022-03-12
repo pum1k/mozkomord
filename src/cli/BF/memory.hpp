@@ -177,8 +177,9 @@ class MemDbgrBase
  public:
     virtual ~MemDbgrBase(){};
 
-    virtual std::size_t get_current_size() = 0;
-    virtual T &get_ref(std::size_t index)  = 0;
+    virtual std::size_t get_current_size()  = 0;
+    virtual std::size_t get_current_index() = 0;
+    virtual T &get_ref(std::size_t index)   = 0;
 };
 
 template <class T>
@@ -191,6 +192,7 @@ class MemDbgrStatic : public MemDbgrBase<T>
     MemDbgrStatic(MemoryStaticBase<T> *mem);
 
     virtual std::size_t get_current_size() override;
+    virtual std::size_t get_current_index() override;
     virtual T &get_ref(std::size_t index) override;
 };
 
@@ -204,6 +206,7 @@ class MemDbgrDynamic : public MemDbgrBase<T>
     MemDbgrDynamic(MemoryDynamic<T> *mem);
 
     virtual std::size_t get_current_size() override;
+    virtual std::size_t get_current_index() override;
     virtual T &get_ref(std::size_t index) override;
 };
 

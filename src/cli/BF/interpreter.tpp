@@ -238,7 +238,7 @@ inline void DebugInterpreter<T>::debug_here()
 
         case 'w':
             os << "######## Source ########\n";
-            this->print_context(20);
+            this->print_context(160);
             os << "########################\n";
             break;
 
@@ -364,6 +364,9 @@ void DebugInterpreter<T>::print_memory()
 
     auto flags = os.flags();
     os << std::hex;
+
+    os << "Memory pointer index (hex): " << this->mem_dbgr->get_current_index()
+       << '\n';
 
     std::size_t mem_size = this->mem_dbgr->get_current_size();
 

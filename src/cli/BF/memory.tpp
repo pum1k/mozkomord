@@ -260,6 +260,12 @@ std::size_t MemDbgrStatic<T>::get_current_size()
 }
 
 template <class T>
+std::size_t MemDbgrStatic<T>::get_current_index()
+{
+    return (this->mem->ptr - this->mem->arr);
+}
+
+template <class T>
 T &MemDbgrStatic<T>::get_ref(std::size_t index)
 {
     if (index >= 0 && index < this->get_current_size())
@@ -290,6 +296,12 @@ template <class T>
 std::size_t MemDbgrDynamic<T>::get_current_size()
 {
     return this->mem->vec.size();
+}
+
+template <class T>
+std::size_t MemDbgrDynamic<T>::get_current_index()
+{
+    return this->mem->index;
 }
 
 template <class T>
