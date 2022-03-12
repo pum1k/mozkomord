@@ -1,11 +1,11 @@
 #ifndef CLI_LANGUAGE_HPP_
 #define CLI_LANGUAGE_HPP_
 
-class Language
+class LanguageBase
 {
  private:
  public:
-    virtual ~Language(){};
+    virtual ~LanguageBase(){};
 
     virtual bool load_options(int argc, const char **argv) = 0;
     virtual void prepare()                                 = 0;

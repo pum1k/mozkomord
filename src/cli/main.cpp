@@ -18,7 +18,7 @@ int main(int argc, const char *argv[])
         return -1;
     }
 
-    std::unique_ptr<Language> lang = nullptr;
+    std::unique_ptr<LanguageBase> lang = nullptr;
 
     lang = std::make_unique<LangBF>();
 

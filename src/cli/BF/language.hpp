@@ -13,7 +13,7 @@
 #include "preprocessor.hpp"
 #include "program.hpp"
 
-class LangBF : public Language
+class LangBF : public LanguageBase
 {
  private:
     argp::ArgParser parser;
