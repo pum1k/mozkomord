@@ -51,7 +51,11 @@ template <>
 inline void Interpreter<uint8_t>::comma_(BF::Interpreter<uint8_t> *inter)
 {
     int c = inter->is.get();
-    if (c == std::istream::traits_type::eof())
+    if (inter->is.eof())
+    {
+        c = 0;
+    }
+    else if (inter->is.fail())
     {
         throw std::runtime_error(strings::prog_read_input_error);
     }
@@ -63,7 +67,11 @@ template <>
 inline void Interpreter<uint16_t>::comma_(BF::Interpreter<uint16_t> *inter)
 {
     int c = inter->is.get();
-    if (c == std::istream::traits_type::eof())
+    if (inter->is.eof())
+    {
+        c = 0;
+    }
+    else if (inter->is.fail())
     {
         throw std::runtime_error(strings::prog_read_input_error);
     }
