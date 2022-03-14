@@ -5,4 +5,5 @@
     input operation when end-of-file (EOF) is reached. You can use CTRL+Z in 
     windows PowerShell to send it.
 ]
-+[,.]
+
++[,|.]

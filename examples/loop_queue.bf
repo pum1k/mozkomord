@@ -20,6 +20,7 @@
 ,                                       read first input
 
 [                                       main program loop
+    |                                   breakpoint
     [<] >                               go to the first stored characters
     [.>]                                print all stored characters
     ++++++++++.----------               print a new line char
