@@ -43,10 +43,6 @@ void LangBF::process_options()
         throw options_error("Invalid value for \"--mem-size\" option.");
     }
 
-    // Debug mode
-    // No check required
-    // This option is queried later in the program
-
     // Mem cell size
     const int &cell_size = this->parser.get_int("cell-size");
     if (cell_size == this->default_i || cell_size == 8)
@@ -57,6 +53,10 @@ void LangBF::process_options()
     {
         throw options_error("Invalid value for \"--cell-size\" option.");
     }
+
+    // Debug mode
+    // No check required
+    // This option is queried later in the program
 
     // Optimizations
     // This option is queried later in the program
@@ -146,17 +146,17 @@ LangBF::LangBF()
            "      Default: 30 000.\n"
            "      This option is ignored when using dynamic memory. "
            "(However, it will cause an error if set to invalid value.)\n"},
-          // Debug mode
-          {"debug",
-           {"--debug"},
-           argp::OptionType::FLAG,
-           "Run with debugging. (Breakpoint symbol \"|\")\n"},
           // Mem cell size
           {"cell-size",
            {"--cell-size"},
            argp::OptionType::INT,
            "Set number of bits for every stack entry.\n"
            "      Allowed values: 8 (default), 16\n"},
+          // Debug mode
+          {"debug",
+           {"--debug"},
+           argp::OptionType::FLAG,
+           "Run with debugging. (Breakpoint symbol \"|\")\n"},
           // Optimizations
           {"optimize",
            {"--optimize"},
