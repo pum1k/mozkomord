@@ -62,9 +62,9 @@ class InterpreterBase
 
 /**
  * Interpreter class can interpret standard BF code.
- * Subclasses can easily add functionality to ignored characters or overrride
- * behaviour of the current implementation by registerring differet functions to
- * the function table.
+ * Subclasses can easily add functionality to ignored characters or override
+ * behaviour of the current implementation by registerring different functions
+ * to the function table.
  */
 template <class T>
 class Interpreter : public InterpreterBase
@@ -135,7 +135,7 @@ class DebugInterpreter : public Interpreter<T>
     // multiple times
     std::ostringstream fake_os;
     std::istringstream fake_is;
-    // stream through which the interpreter sends all output and recieves all
+    // stream through which the interpreter sends all output and receives all
     // input
     std::ostream &real_os;
     std::istream &real_is;

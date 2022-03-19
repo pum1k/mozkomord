@@ -217,7 +217,7 @@ class MemDbgrDynamic : public MemDbgrBase<T>
 // #############################################################################
 
 /**
- * Enumaration representing supported memory data types
+ * Enumeration representing supported memory data types
  */
 enum class MemDataType
 {

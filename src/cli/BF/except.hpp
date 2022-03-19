@@ -27,7 +27,8 @@ class syntax_error : public std::exception
 
 /**
  * Exception signaling unexpected closing bracket in BF source code.
- * This class holds line and column number of the place where the error occured.
+ * This class holds line and column number of the place where the error
+ * occurred.
  */
 class unexpected_bracket_error : public syntax_error
 {
@@ -52,7 +53,7 @@ class unexpected_bracket_error : public syntax_error
 
 /**
  * Exception signaling missing closing bracket.
- * Does not hold any aditional data about the error.
+ * Does not hold any additional data about the error.
  */
 class missing_bracket_error : public syntax_error
 {

@@ -41,7 +41,7 @@ enum : unsigned char
 
 /**
  * Replaces consecutive operations +-<> with a single instruction that has the
- * same efect.
+ * same effect.
  */
 void remove_consecutive_operations(std::list<Program::value_type> &prog_l);
 
