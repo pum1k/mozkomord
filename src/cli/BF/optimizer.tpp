@@ -6,7 +6,7 @@ namespace BF
 template <class iterator,
           std::enable_if_t<std::is_same_v<typename iterator::value_type,
                                           Program::value_type>,
-                           bool> = true>
+                           bool> /* = true */>
 void uint_to_prog(iterator &inst_ptr, uint16_t num)
 {
     for (std::size_t i = 0; i < sizeof(uint16_t); i++)
@@ -19,7 +19,7 @@ void uint_to_prog(iterator &inst_ptr, uint16_t num)
 template <class iterator,
           std::enable_if_t<std::is_same_v<typename iterator::value_type,
                                           Program::value_type>,
-                           bool> = true>
+                           bool> /* = true */>
 uint16_t prog_to_uint(iterator &inst_ptr)
 {
     uint16_t rv = 0;

@@ -8,7 +8,7 @@ Program::Program(const container &prog) { this->set(prog); }
 
 void Program::set(const std::string &prog)
 {
-    this->prog = std::move(container(prog.begin(), prog.end()));
+    this->prog = container(prog.begin(), prog.end());
 }
 
 void Program::set(const container &prog) { this->prog = prog; }
