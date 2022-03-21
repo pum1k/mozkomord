@@ -200,6 +200,14 @@ inline void DebugInterpreter<T>::debug_here()
     std::ostream &os = this->real_os;
     std::istream &is = this->real_is;
 
+    if (is.eof())
+    {
+        os << "Warning: debugger cannot be entered because comunication "
+              "stream was closed."
+           << std::endl;
+        return;
+    }
+
     os << "\n################################\n"
           "Breakpoint hit.\n"
        << strings::debugger_questionmark_to_show_help << std::endl;
@@ -456,8 +464,11 @@ inline void DebugInterpreter<T>::debug_comma_(BF::Interpreter<T> *inter)
         d_inter->fake_is.str().size())
     {
         std::string line;
-        std::getline(d_inter->real_is, line);
-        line += '\n';
+        if (!d_inter->real_is.eof())
+        {
+            std::getline(d_inter->real_is, line);
+            line += '\n';
+        }
         DEBUG_PRINT("[DebugInterpreter]: loading next input line. Content: \""
                     << line << "\"");
         auto pos = d_inter->fake_is.tellg();
