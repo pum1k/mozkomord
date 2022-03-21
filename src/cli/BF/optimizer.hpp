@@ -32,11 +32,12 @@ namespace optimizers
  */
 enum : unsigned char
 {
-    op_multi_inc = 128,
+    op_mark_3_byte_begin = 128,
+    op_multi_inc         = 128,
     op_multi_dec,
     op_multi_ptr_inc,
     op_multi_ptr_dec,
-
+    op_mark_3_byte_end,
 };
 
 /**

@@ -544,6 +544,45 @@ void OptimizedInterpreter<T>::multi_memptr_dec_(BF::Interpreter<T> *inter)
 }
 
 template <class T>
+void OptimizedInterpreter<T>::optim_left_square_bracket_(
+    BF::Interpreter<T> *inter)
+{
+    OptimizedInterpreter *o_inter =
+        static_cast<OptimizedInterpreter<T> *>(inter);
+
+    if (o_inter->mem->ref() != 0)
+    {
+        Program::container::const_iterator tmp = o_inter->inst_ptr;
+        do
+        {
+            o_inter->inst_ptr = tmp + 1;
+
+            o_inter->run_();
+        } while (o_inter->mem->ref() != 0);
+
+        --o_inter->inst_ptr;
+    }
+    else
+    {
+        int stop_after = 1;
+        do
+        {
+            ++o_inter->inst_ptr;
+            if (*o_inter->inst_ptr == ']')
+                --stop_after;
+            else if (*o_inter->inst_ptr == '[')
+                ++stop_after;
+            if (optimizers::op_mark_3_byte_begin <= *o_inter->inst_ptr &&
+                *o_inter->inst_ptr < optimizers::op_mark_3_byte_end)
+            {
+                o_inter->inst_ptr += 2;
+            }
+
+        } while (stop_after != 0);
+    }
+}
+
+template <class T>
 OptimizedInterpreter<T>::OptimizedInterpreter(std::ostream &os,
                                               std::istream &is,
                                               MemoryBase<T> *mem)
@@ -557,6 +596,8 @@ OptimizedInterpreter<T>::OptimizedInterpreter(std::ostream &os,
                            &OptimizedInterpreter::multi_memptr_inc_);
     this->register_handler(BF::optimizers::op_multi_ptr_dec,
                            &OptimizedInterpreter::multi_memptr_dec_);
+    this->register_handler('[',
+                           &OptimizedInterpreter::optim_left_square_bracket_);
 }
 
 template <class T>

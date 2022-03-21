@@ -187,6 +187,7 @@ class OptimizedInterpreter : public Interpreter<T>
     static void multi_value_dec_(BF::Interpreter<T> *inter);
     static void multi_memptr_inc_(BF::Interpreter<T> *inter);
     static void multi_memptr_dec_(BF::Interpreter<T> *inter);
+    static void optim_left_square_bracket_(BF::Interpreter<T> *inter);
 
  public:
     OptimizedInterpreter(std::ostream &os, std::istream &is,
