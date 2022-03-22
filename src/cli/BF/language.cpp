@@ -245,9 +245,8 @@ catch (const std::exception &e)
 void LangBF::run()
 try
 {
-#ifdef DEBUG
     DEBUG_PRINT("[LangBF]: Running the program.");
-#endif // DEBUG
+
     this->inter->run(this->prog);
 }
 catch (const language_error &e)
