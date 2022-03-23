@@ -24,10 +24,10 @@ cli:
 	@$(MAKE) -f Makefile-cli $(MAKE_TARGET)
 	@echo $(PRINT)CLI done.
 
-gui:
-	@echo $(PRINT)Launching GUI Makefile...
-	@$(MAKE) -f Makefile-gui $(MAKE_TARGET)
-	@echo $(PRINT)GUI done.
+# gui:
+# 	@echo $(PRINT)Launching GUI Makefile...
+# 	@$(MAKE) -f Makefile-gui $(MAKE_TARGET)
+# 	@echo $(PRINT)GUI done.
 
 debug: all
 

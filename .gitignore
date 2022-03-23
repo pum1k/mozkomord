@@ -2,5 +2,4 @@
 *.gch
 *.exe
 build/*
-wxW*/*
 .vscode/*
