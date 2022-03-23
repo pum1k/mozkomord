@@ -24,12 +24,7 @@ int main(int argc, const char *argv[])
 
     try
     {
-        if (!lang->load_options(argc, argv))
-        {
-            return 0;
-        }
-        lang->prepare();
-        lang->run();
+        lang->execute(argc, argv);
     }
     catch (const debugger_terminate &e)
     {

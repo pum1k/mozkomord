@@ -119,66 +119,6 @@ void LangBF::setup_interpreter()
     this->inter.reset(inter);
 }
 
-LangBF::LangBF()
-    : parser({
-          // File
-          {"file",
-           {"-f", "--file"},
-           argp::OptionType::STRING,
-           "Load program from this file. (REQUIRED)\n"},
-          // Memory type
-          {"mem-type",
-           {"--mem-type"},
-           argp::OptionType::STRING,
-           "Set memory type. Available values:\n"
-           "      static-safe - static size, bounds checking (default)\n"
-           "      static-unsafe - static size, no bounds checking\n"
-           "      static-loop - static size, decrementing pointer to the first "
-           "element goes to the last one and vice versa\n"
-           "      dynamic - incrementing pointer to the last element increases "
-           "the memory size (decrementing pointer to the first element results "
-           "in runtime error)\n"},
-          // Memory size
-          {"mem-size",
-           {"--mem-size"},
-           argp::OptionType::INT,
-           "Set memory size for the interpreted program.\n"
-           "      Default: 30 000.\n"
-           "      This option is ignored when using dynamic memory. "
-           "(However, it will cause an error if set to invalid value.)\n"},
-          // Mem cell size
-          {"cell-size",
-           {"--cell-size"},
-           argp::OptionType::INT,
-           "Set number of bits for every stack entry.\n"
-           "      Allowed values: 8 (default), 16\n"},
-          // Debug mode
-          {"debug",
-           {"--debug"},
-           argp::OptionType::FLAG,
-           "Run with debugging. (Breakpoint symbol \"|\")\n"},
-          // Optimizations
-          {"optimize",
-           {"--optimize"},
-           argp::OptionType::FLAG,
-           "When this option is selected, preprocessor will try to optimize "
-           "the program.\n"
-           "      Warning: This option cannot be used when debugging is "
-           "enabled.\n"},
-          // Help
-          {"help",
-           {"-h", "--help"},
-           argp::OptionType::FLAG,
-           "Show this help.\n"},
-      })
-{
-    this->default_b = false;
-    this->default_s = "";
-    this->default_i = -1;
-
-    this->inter = nullptr;
-}
-
 bool LangBF::load_options(int argc, const char **argv)
 {
 #ifdef DEBUG
@@ -256,4 +196,64 @@ catch (const language_error &e)
 catch (const std::exception &e)
 {
     throw run_error(e.what());
+}
+
+LangBF::LangBF()
+    : parser({
+          // File
+          {"file",
+           {"-f", "--file"},
+           argp::OptionType::STRING,
+           "Load program from this file. (REQUIRED)\n"},
+          // Memory type
+          {"mem-type",
+           {"--mem-type"},
+           argp::OptionType::STRING,
+           "Set memory type. Available values:\n"
+           "      static-safe - static size, bounds checking (default)\n"
+           "      static-unsafe - static size, no bounds checking\n"
+           "      static-loop - static size, decrementing pointer to the first "
+           "element goes to the last one and vice versa\n"
+           "      dynamic - incrementing pointer to the last element increases "
+           "the memory size (decrementing pointer to the first element results "
+           "in runtime error)\n"},
+          // Memory size
+          {"mem-size",
+           {"--mem-size"},
+           argp::OptionType::INT,
+           "Set memory size for the interpreted program.\n"
+           "      Default: 30 000.\n"
+           "      This option is ignored when using dynamic memory. "
+           "(However, it will cause an error if set to invalid value.)\n"},
+          // Mem cell size
+          {"cell-size",
+           {"--cell-size"},
+           argp::OptionType::INT,
+           "Set number of bits for every stack entry.\n"
+           "      Allowed values: 8 (default), 16\n"},
+          // Debug mode
+          {"debug",
+           {"--debug"},
+           argp::OptionType::FLAG,
+           "Run with debugging. (Breakpoint symbol \"|\")\n"},
+          // Optimizations
+          {"optimize",
+           {"--optimize"},
+           argp::OptionType::FLAG,
+           "When this option is selected, preprocessor will try to optimize "
+           "the program.\n"
+           "      Warning: This option cannot be used when debugging is "
+           "enabled.\n"},
+          // Help
+          {"help",
+           {"-h", "--help"},
+           argp::OptionType::FLAG,
+           "Show this help.\n"},
+      })
+{
+    this->default_b = false;
+    this->default_s = "";
+    this->default_i = -1;
+
+    this->inter = nullptr;
 }

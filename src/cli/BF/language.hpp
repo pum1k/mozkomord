@@ -15,7 +15,7 @@
 
 class LangBF : public LanguageBase
 {
- private:
+ protected:
     argp::ArgParser parser;
     bool default_b;
     std::string default_s;
@@ -35,12 +35,12 @@ class LangBF : public LanguageBase
     BF::Preprocessor prep;
     std::unique_ptr<BF::InterpreterBase> inter;
 
- public:
-    LangBF();
-
     virtual bool load_options(int argc, const char **argv) override;
     virtual void prepare() override;
     virtual void run() override;
+
+ public:
+    LangBF();
 };
 
 #endif // CLI_BF_LANGUAGE_HPP_

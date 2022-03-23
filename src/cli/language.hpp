@@ -1,15 +1,19 @@
 #ifndef CLI_LANGUAGE_HPP_
 #define CLI_LANGUAGE_HPP_
 
+#include <string>
+
 class LanguageBase
 {
- private:
- public:
-    virtual ~LanguageBase(){};
-
+ protected:
     virtual bool load_options(int argc, const char **argv) = 0;
     virtual void prepare()                                 = 0;
     virtual void run()                                     = 0;
+
+ public:
+    virtual ~LanguageBase(){};
+
+    void execute(int argc, const char **argv);
 };
 
 class language_error : public std::exception
