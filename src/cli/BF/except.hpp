@@ -10,6 +10,8 @@
 #include <string>
 #include <utility>
 
+#include "strings.hpp"
+
 namespace BF
 {
 

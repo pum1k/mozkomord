@@ -7,10 +7,12 @@ void unexpected_bracket_error::init_msg()
 {
     if (!this->has_pos())
     {
-        this->msg = "Unexpected closing bracket.";
+        this->msg = strings::syntax_error_prefix;
+        this->msg += "Unexpected closing bracket.";
         return;
     }
-    this->msg = "Unexpected closing bracket at line: ";
+    this->msg = strings::syntax_error_prefix;
+    this->msg += "Unexpected closing bracket at line: ";
     this->msg += std::to_string(this->pos.first);
     this->msg += ", char: ";
     this->msg += std::to_string(this->pos.second);
@@ -29,7 +31,9 @@ bool unexpected_bracket_error::has_pos() const noexcept
 
 const char *missing_bracket_error::what() const noexcept
 {
-    return "Missing closing bracket.";
+    std::string msg = strings::syntax_error_prefix;
+    msg += "Missing closing bracket.";
+    return msg.c_str();
 }
 
 load_file_error::load_file_error(const std::string &filename)
