@@ -59,7 +59,11 @@ class unexpected_bracket_error : public syntax_error
  */
 class missing_bracket_error : public syntax_error
 {
+ private:
+    std::string msg;
+
  public:
+    missing_bracket_error();
     virtual const char *what() const noexcept override;
 };
 

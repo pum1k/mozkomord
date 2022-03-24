@@ -29,11 +29,15 @@ bool unexpected_bracket_error::has_pos() const noexcept
     return !(this->pos.first == 0 || this->pos.second == 0);
 }
 
+missing_bracket_error::missing_bracket_error()
+{
+    this->msg = std::string(strings::syntax_error_prefix);
+    this->msg += "Missing closing bracket.";
+}
+
 const char *missing_bracket_error::what() const noexcept
 {
-    std::string msg = strings::syntax_error_prefix;
-    msg += "Missing closing bracket.";
-    return msg.c_str();
+    return this->msg.c_str();
 }
 
 load_file_error::load_file_error(const std::string &filename)
