@@ -59,6 +59,10 @@ void noop(Program::container &, bool);
  */
 void remove_unused(Program::container &prog, bool keep_debug);
 
+/**
+ * First calls `remove_unused` to clean up the code.
+ * After that, it tries to optimize the code with custom operations.
+ */
 void optimize(Program::container &prog, bool keep_debug);
 
 } // namespace prep

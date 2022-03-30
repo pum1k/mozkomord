@@ -3,6 +3,12 @@
 namespace BF
 {
 
+// #############################################################################
+// #############################################################################
+// #### INTERPRETER ############################################################
+// #############################################################################
+// #############################################################################
+
 template <class T>
 void Interpreter<T>::run_()
 {
@@ -88,6 +94,10 @@ void Interpreter<T>::greater_than_sign_(BF::Interpreter<T> *inter)
     inter->mem->inc_ptr();
 }
 
+// recursive implementation of BF loops
+// this calls `run_` for each iteration of the loop
+// if the loop should not be run at all, it finds a matching closing bracket and
+// moves the intruction pointer right after it
 template <class T>
 void Interpreter<T>::left_square_bracket_(BF::Interpreter<T> *inter)
 {
@@ -192,6 +202,14 @@ void Interpreter<T>::reset_memory()
     this->mem->reset();
 }
 
+// #############################################################################
+// #############################################################################
+// #### DEBUG INTERPRETER ######################################################
+// #############################################################################
+// #############################################################################
+
+// this function handles user interaction with the debugger
+// it reads comand from the user and calls functions that perform them
 template <class T>
 inline void DebugInterpreter<T>::debug_here()
 {
@@ -304,6 +322,7 @@ void DebugInterpreter<T>::print_context(int size)
         pos += 5;
     }
 
+    // print characters before the breakpoint
     for (auto it = this->inst_ptr - front; it < this->inst_ptr; ++it)
     {
         os << (char)*it;
@@ -317,11 +336,16 @@ void DebugInterpreter<T>::print_context(int size)
         }
     }
 
+    // print the breakpoint character itself
     os << *this->inst_ptr;
 
+    // print characters after the breakpoint character
     for (auto it = this->inst_ptr + 1; it < this->inst_ptr + back; ++it)
     {
         os << (char)*it;
+        // if there are multiple lines after the breakpoint character, print the
+        // message showing where the current breakpoint is after finishing the
+        // line with the breakpoint
         if ((char)*it == '\n')
         {
             if (!pos_printed)
@@ -341,6 +365,9 @@ void DebugInterpreter<T>::print_context(int size)
         os << "(...)";
     }
 
+    // if all characters after the breakpoint were on the same line, message
+    // showing position of the current breakpoint was not yet printed, so do it
+    // now
     if (!pos_printed)
     {
         os << '\n';
@@ -369,6 +396,7 @@ void DebugInterpreter<T>::print_memory()
 
     for (std::size_t i = 0; i < mem_size; i++)
     {
+        // line starts with address
         if ((i % 16) == 0)
         {
             os << std::right << std::setw(8) << std::setfill('0');
@@ -379,6 +407,8 @@ void DebugInterpreter<T>::print_memory()
         os << std::setw(2 * sizeof(T));
         os << static_cast<uint64_t>(this->mem_dbgr->get_ref(i));
 
+        // print newline after 16th cell, double space after 8th, otherwise
+        // single space is printed
         if ((i % 16) == 15)
         {
             os << '\n';
@@ -393,17 +423,12 @@ void DebugInterpreter<T>::print_memory()
         }
     }
 
-    if ((mem_size % 16) == 0)
-    {
-        os << std::right << std::setw(8) << std::setfill('0');
-        os << mem_size << "\n";
-    }
-    else
+    if (!((mem_size % 16) == 0))
     {
         os << '\n';
-        os << std::right << std::setw(8) << std::setfill('0');
-        os << mem_size << "\n";
     }
+    os << std::right << std::setw(8) << std::setfill('0');
+    os << mem_size << "\n";
 
     os << std::flush;
     os.flags(flags);
@@ -446,6 +471,8 @@ void DebugInterpreter<T>::print_all_output()
     os << "Program output: \"" << this->fake_os.str() << "\"\n";
 }
 
+// call standard BF dot instruction handler, then send the output produced by it
+// to the real output stream stored in the class
 template <class T>
 void DebugInterpreter<T>::debug_dot_(BF::Interpreter<T> *inter)
 {
@@ -455,6 +482,10 @@ void DebugInterpreter<T>::debug_dot_(BF::Interpreter<T> *inter)
     d_inter->real_os << *(d_inter->fake_os.str().end() - 1);
 }
 
+// if there is no input waiting for the program in the input stringstream, it
+// reads a single line from the real input stream and adds it to the end of the
+// string stream
+// at the end it calls standard BF comman instruction handler
 template <class T>
 inline void DebugInterpreter<T>::debug_comma_(BF::Interpreter<T> *inter)
 {
@@ -518,6 +549,12 @@ bool DebugInterpreter<T>::run(const Program::container &prog)
     return this->Interpreter<T>::run(prog);
 }
 
+// #############################################################################
+// #############################################################################
+// #### OPTIMIZED INTERPRETER ##################################################
+// #############################################################################
+// #############################################################################
+
 template <class T>
 void OptimizedInterpreter<T>::multi_value_inc_(BF::Interpreter<T> *inter)
 {
@@ -554,6 +591,11 @@ void OptimizedInterpreter<T>::multi_memptr_dec_(BF::Interpreter<T> *inter)
     o_inter->mem->move_ptr(-prog_to_uint(o_inter->inst_ptr));
 }
 
+// same as Interpreter::left_square_bracket_, but has different code for
+// skipping the loops
+// this is done because multi character optimized instructions may contain
+// square brackets in one of the later bytes and it would break the standard
+// version of this function
 template <class T>
 void OptimizedInterpreter<T>::optim_left_square_bracket_(
     BF::Interpreter<T> *inter)
@@ -610,6 +652,12 @@ OptimizedInterpreter<T>::OptimizedInterpreter(std::ostream &os,
     this->register_handler('[',
                            &OptimizedInterpreter::optim_left_square_bracket_);
 }
+
+// #############################################################################
+// #############################################################################
+// #### INTERPRETER FACTORY ####################################################
+// #############################################################################
+// #############################################################################
 
 template <class T>
 InterpreterBase *InterFactory::new_inter_standard(std::ostream &os,

@@ -6,6 +6,8 @@ namespace BF
 namespace optimizers
 {
 
+// helper function for inserting the optimized instructions and removing the
+// original ones
 void replace_consecutive_operations_with_command(
     Program::value_type prev, int streak,
     std::list<Program::value_type> &prog_l,
@@ -49,6 +51,8 @@ void remove_consecutive_operations(std::list<Program::value_type> &prog_l)
 
     ++it;
 
+    // search for streaks of 3 or more instructions +-<> and replace them with
+    // optimized instructions
     for (; it != eit; ++it)
     {
         if (*it == prev)
