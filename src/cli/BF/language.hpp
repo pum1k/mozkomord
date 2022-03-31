@@ -13,6 +13,12 @@
 #include "preprocessor.hpp"
 #include "program.hpp"
 
+/**
+ * This class is responsible for setting up and running interpretation of BF
+ * programs.
+ * It parses command line arguments, sets up the interpreter and all other
+ * required objects and then runs the interpreter.
+ */
 class LangBF : public LanguageBase
 {
  protected:
@@ -23,9 +29,14 @@ class LangBF : public LanguageBase
 
     void print_help(const char *prog_name);
 
+    // check if command line options are valid, store some of them outside the
+    // parser object
     void process_options();
+    // load file to prog object
     void setup_program();
+    // set fuctions for preprocessing the BF code
     void setup_preprocessor();
+    // create interpreter object
     void setup_interpreter();
 
     BF::MemDataType mem_data_type;
