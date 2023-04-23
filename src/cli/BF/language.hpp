@@ -14,6 +14,14 @@
 #include "memory.hpp"
 #include "preprocessor.hpp"
 
+template <>
+void argp::KeywordOption<BF::MemoryType>::from_string(
+    const std::vector<std::string_view> &strings);
+
+template <>
+void argp::KeywordOption<BF::MemDataType>::from_string(
+    const std::vector<std::string_view> &strings);
+
 /**
  * This class is responsible for setting up and running interpretation of BF
  * programs.
@@ -23,15 +31,7 @@
 class LangBF : public LanguageBase
 {
  protected:
-    argp::ArgParser parser;
-    bool default_b;
-    std::string default_s;
-    int default_i;
-
-    void print_help(const char *prog_name);
-
-    // check if command line options are valid, store some of them outside the
-    // parser object
+    // check if command line options are valid, update inner classes accordingly
     void process_options();
     // load file to prog object
     void setup_program();
@@ -39,6 +39,15 @@ class LangBF : public LanguageBase
     void setup_preprocessor();
     // create interpreter object
     void setup_interpreter();
+
+    argp::KeywordOption<std::string> filename;
+    argp::KeywordOption<BF::MemoryType> mem_type;
+    argp::KeywordOption<int> mem_size;
+    argp::KeywordOption<BF::MemDataType> mem_cell_size;
+    argp::KeywordOption<bool> debug;
+    argp::KeywordOption<bool> optimize;
+    argp::KeywordOption<bool> help;
+    argp::OptionsList opts;
 
     BF::MemDataType mem_data_type;
     BF::InterFactory inter_fact;

@@ -1,58 +1,67 @@
 #include "language.hpp"
 
-void LangBF::print_help(const char *prog_name)
+template <>
+void argp::KeywordOption<BF::MemoryType>::from_string(
+    const std::vector<std::string_view> &strings)
 {
-    std::cout << "Usage: " << prog_name << " [options]\n"
-              << "Options:\n";
-    this->parser.print_help(std::cout);
+    std::string_view data = strings[1];
+
+    if (data == "static-safe")
+        this->val = BF::MemoryType::static_safe;
+    else if (data == "static-unsafe")
+        this->val = BF::MemoryType::static_unsafe;
+    else if (data == "static-loop")
+        this->val = BF::MemoryType::static_loop;
+    else if (data == "dynamic")
+        this->val = BF::MemoryType::dynamic;
+    else
+    {
+        throw std::invalid_argument("Could not convert \"" + std::string(data) +
+                                    "\" to BF::MemoryType");
+    }
+}
+
+template <>
+void argp::KeywordOption<BF::MemDataType>::from_string(
+    const std::vector<std::string_view> &strings)
+{
+    std::string_view data = strings[1];
+
+    if (data == "8")
+        this->val = BF::MemDataType::bit8;
+    else if (data == "16")
+        this->val = BF::MemDataType::bit16;
+    else
+    {
+        throw options_error("Invalid value for \"--cell-size\" option.");
+    }
 }
 
 void LangBF::process_options()
 {
     // File
     // This option is queried later in the program
-    if (this->default_s == this->parser.get_string("file"))
+    if (!this->filename.is_set())
     {
         throw options_error(
             "You must specify file to run. (options \"-f\" or \"--file\")");
     }
 
     // Memory type
-    const std::string &mem_type_s = this->parser.get_string("mem-type");
-    if (mem_type_s == "static-safe" || mem_type_s == "")
-        this->mem_fact.set_mem_type(BF::MemoryType::static_safe);
-    else if (mem_type_s == "static-unsafe")
-        this->mem_fact.set_mem_type(BF::MemoryType::static_unsafe);
-    else if (mem_type_s == "static-loop")
-        this->mem_fact.set_mem_type(BF::MemoryType::static_loop);
-    else if (mem_type_s == "dynamic")
-        this->mem_fact.set_mem_type(BF::MemoryType::dynamic);
-    else
-    {
-        throw options_error("Invalid value for \"--mem-type\" option.");
-    }
+    this->mem_fact.set_mem_type(this->mem_type.get_val());
 
     // Memory size
-    const int &stack_size = this->parser.get_int("mem-size");
-    if (stack_size == this->default_i)
-        this->mem_fact.set_mem_size(30000);
-    else if (stack_size > 0)
-        this->mem_fact.set_mem_size(stack_size);
+    if (this->mem_size.get_val() > 0)
+    {
+        this->mem_fact.set_mem_size(this->mem_size.get_val());
+    }
     else
     {
         throw options_error("Invalid value for \"--mem-size\" option.");
     }
 
     // Mem cell size
-    const int &cell_size = this->parser.get_int("cell-size");
-    if (cell_size == this->default_i || cell_size == 8)
-        this->mem_data_type = BF::MemDataType::bit8;
-    else if (cell_size == 16)
-        this->mem_data_type = BF::MemDataType::bit16;
-    else
-    {
-        throw options_error("Invalid value for \"--cell-size\" option.");
-    }
+    this->mem_data_type = this->mem_cell_size.get_val();
 
     // Debug mode
     // No check required
@@ -61,7 +70,7 @@ void LangBF::process_options()
     // Optimizations
     // This option is queried later in the program
     // if both debugging and optimizations are enabled, throw error
-    if (this->parser.get_flag("debug") && this->parser.get_flag("optimize"))
+    if (this->debug.get_val() && this->optimize.get_val())
     {
         throw options_error(
             "Debugging and optimizations cannot be enabled both at the same "
@@ -69,20 +78,17 @@ void LangBF::process_options()
     }
 }
 
-void LangBF::setup_program()
-{
-    this->prog.load(this->parser.get_string("file"));
-}
+void LangBF::setup_program() { this->prog.load(this->filename.get_val()); }
 
 void LangBF::setup_preprocessor()
 {
     this->prep.set_check(BF::check::standard);
 
-    if (this->parser.get_flag("debug"))
+    if (this->debug.get_val())
     {
         this->prep.set_process(BF::prep::noop);
     }
-    else if (this->parser.get_flag("optimize"))
+    else if (this->optimize.get_val())
     {
         this->prep.set_process(BF::prep::optimize);
     }
@@ -98,9 +104,9 @@ void LangBF::setup_interpreter()
 
     this->inter_fact.set_mem_factory(&this->mem_fact);
 
-    if (this->parser.get_flag("debug"))
+    if (this->debug.get_val())
         this->inter_fact.set_inter_class(BF::InterClass::standard_debug);
-    else if (this->parser.get_flag("optimize"))
+    else if (this->optimize.get_val())
         this->inter_fact.set_inter_class(BF::InterClass::optimized);
     else
         this->inter_fact.set_inter_class(BF::InterClass::standard);
@@ -130,29 +136,27 @@ bool LangBF::load_options(int argc, const char **argv)
     std::cout << std::flush;
 #endif // DEBUG
 
-    this->parser.set_defaults(this->default_b, this->default_s,
-                              this->default_i);
-
-    bool unrecognised;
+    std::vector<std::string> unrecognised;
 
     try
     {
-        unrecognised = !this->parser.parse(argc, argv, 1);
+        unrecognised = argp::parse(argc, argv, this->opts, 1);
     }
     catch (const std::exception &e)
     {
         throw options_error(e.what());
     }
 
-    if (this->parser.get_flag("help"))
+    if (this->help.get_val())
     {
-        this->print_help(argv[0]);
+        argp::print_help(std::cout, argv[0], this->opts);
         return false;
     }
-    if (unrecognised)
+
+    if (unrecognised.size() != 0)
     {
         std::string msg = "Unrecognised parameters:";
-        for (std::string param : this->parser.get_unrecognised())
+        for (std::string param : unrecognised)
         {
             msg += " \"";
             msg += param;
@@ -199,61 +203,39 @@ catch (const std::exception &e)
 }
 
 LangBF::LangBF()
-    : parser({
-          // File
-          {"file",
-           {"-f", "--file"},
-           argp::OptionType::STRING,
-           "Load program from this file. (REQUIRED)\n"},
-          // Memory type
-          {"mem-type",
-           {"--mem-type"},
-           argp::OptionType::STRING,
-           "Set memory type. Available values:\n"
-           "      static-safe - static size, bounds checking (default)\n"
-           "      static-unsafe - static size, no bounds checking\n"
-           "      static-loop - static size, decrementing pointer to the first "
-           "element goes to the last one and vice versa\n"
-           "      dynamic - incrementing pointer to the last element increases "
-           "the memory size (decrementing pointer to the first element results "
-           "in runtime error)\n"},
-          // Memory size
-          {"mem-size",
-           {"--mem-size"},
-           argp::OptionType::INT,
-           "Set memory size for the interpreted program.\n"
-           "      Default: 30 000.\n"
-           "      This option is ignored when using dynamic memory. "
-           "(However, it will cause an error if set to invalid value.)\n"},
-          // Mem cell size
-          {"cell-size",
-           {"--cell-size"},
-           argp::OptionType::INT,
-           "Set number of bits for every stack entry.\n"
-           "      Allowed values: 8 (default), 16\n"},
-          // Debug mode
-          {"debug",
-           {"--debug"},
-           argp::OptionType::FLAG,
-           "Run with debugging. (Breakpoint symbol \"|\")\n"},
-          // Optimizations
-          {"optimize",
-           {"--optimize"},
-           argp::OptionType::FLAG,
-           "When this option is selected, preprocessor will try to optimize "
-           "the program.\n"
-           "      Warning: This option cannot be used when debugging is "
-           "enabled.\n"},
-          // Help
-          {"help",
-           {"-h", "--help"},
-           argp::OptionType::FLAG,
-           "Show this help.\n"},
-      })
+    : filename({"-f", "--file"}, "Load program from this file. (REQUIRED)\n"),
+      mem_type(
+          {"--mem-type"},
+          "Set memory type. Available values:\n"
+          "  static-safe - static size, bounds checking (default)\n"
+          "  static-unsafe - static size, no bounds checking\n"
+          "  static-loop - static size, decrementing pointer to the first "
+          "element goes to the last one and vice versa\n"
+          "  dynamic - incrementing pointer to the last element increases "
+          "the memory size (decrementing pointer to the first element results "
+          "in runtime error)",
+          BF::MemoryType::static_safe),
+      mem_size(
+          {"--mem-size"},
+          "Set memory size for the interpreted program.\n"
+          "Default value: 30 000.\n"
+          "This option is ignored when using dynamic memory. "
+          "(However, it will still cause an error if set to invalid value.)",
+          30000),
+      mem_cell_size({"--mem-size"},
+                    "Set number of bits for every stack entry.\n"
+                    "Allowed values: 8 (default), 16",
+                    BF::MemDataType::bit8),
+      debug({"--debug"}, "Run with debugging. (Breakpoint symbol \"|\")"),
+      optimize(
+          {"--optimize"},
+          "When this option is selected, preprocessor will try to optimize "
+          "the program.\n"
+          "Warning: This option cannot be used when debugging is "
+          "enabled."),
+      help({"-h", "--help"}, "Show this help."),
+      opts({&filename, &mem_type, &mem_size, &mem_cell_size, &debug, &optimize,
+            &help})
 {
-    this->default_b = false;
-    this->default_s = "";
-    this->default_i = -1;
-
     this->inter = nullptr;
 }
