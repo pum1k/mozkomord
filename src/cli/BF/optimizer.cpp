@@ -9,43 +9,44 @@ namespace optimizers
 // helper function for inserting the optimized instructions and removing the
 // original ones
 void replace_consecutive_operations_with_command(
-    Program::value_type prev, int streak,
-    std::list<Program::value_type> &prog_l,
-    std::list<Program::value_type>::iterator &streak_begin_it,
-    std::list<Program::value_type>::iterator &it)
+    utils::Program::value_type prev, int streak,
+    std::list<utils::Program::value_type> &prog_l,
+    std::list<utils::Program::value_type>::iterator &streak_begin_it,
+    std::list<utils::Program::value_type>::iterator &it)
 {
-    Program::value_type instr;
+    utils::Program::value_type instr;
     switch (prev)
     {
     case '+':
-        instr = static_cast<Program::value_type>(op_multi_inc);
+        instr = static_cast<utils::Program::value_type>(op_multi_inc);
         break;
     case '-':
-        instr = static_cast<Program::value_type>(op_multi_dec);
+        instr = static_cast<utils::Program::value_type>(op_multi_dec);
         break;
     case '<':
-        instr = static_cast<Program::value_type>(op_multi_ptr_dec);
+        instr = static_cast<utils::Program::value_type>(op_multi_ptr_dec);
         break;
     case '>':
-        instr = static_cast<Program::value_type>(op_multi_ptr_inc);
+        instr = static_cast<utils::Program::value_type>(op_multi_ptr_inc);
         break;
     }
 
     *streak_begin_it = instr;
-    uint_to_prog(streak_begin_it, streak);
+    utils::uint_to_prog(streak_begin_it, streak);
     ++streak_begin_it;
     prog_l.erase(streak_begin_it, it);
 }
 
-void remove_consecutive_operations(std::list<Program::value_type> &prog_l)
+void remove_consecutive_operations(
+    std::list<utils::Program::value_type> &prog_l)
 {
-    using iter_t = std::list<Program::value_type>::iterator;
+    using iter_t = std::list<utils::Program::value_type>::iterator;
 
     iter_t it  = prog_l.begin();
     iter_t eit = prog_l.end();
 
-    uint16_t streak          = 0;
-    Program::value_type prev = *it;
+    uint16_t streak                 = 0;
+    utils::Program::value_type prev = *it;
 
     iter_t streak_begin_it;
 

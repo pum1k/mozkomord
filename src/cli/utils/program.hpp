@@ -1,5 +1,5 @@
-#ifndef CLI_BF_PROGRAM_HPP_
-#define CLI_BF_PROGRAM_HPP_
+#ifndef CLI_UTILS_PROGRAM_HPP_
+#define CLI_UTILS_PROGRAM_HPP_
 
 #include <fstream>
 #include <string>
@@ -7,12 +7,12 @@
 
 #include "except.hpp"
 
-namespace BF
+namespace utils
 {
 
 /**
- * This class is responsible for loading and storing the BF program.
- * It also defins types that are used to store the program.
+ * This class is responsible for loading and storing programs.
+ * It also defines types that are used to store the program.
  */
 class Program
 {
@@ -36,6 +36,6 @@ class Program
     const container &get_const() const;
 };
 
-} // namespace BF
+} // namespace utils
 
-#endif // CLI_BF_PROGRAM_HPP_
+#endif // CLI_UTILS_PROGRAM_HPP_

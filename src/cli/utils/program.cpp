@@ -1,6 +1,6 @@
 #include "program.hpp"
 
-namespace BF
+namespace utils
 {
 
 Program::Program(const std::string &prog) { this->set(prog); }
@@ -30,4 +30,4 @@ void Program::load(const std::string &file)
 Program::container &Program::get() { return this->prog; }
 const Program::container &Program::get_const() const { return this->prog; }
 
-} // namespace BF
+} // namespace utils

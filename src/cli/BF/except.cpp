@@ -40,15 +40,6 @@ const char *missing_bracket_error::what() const noexcept
     return this->msg.c_str();
 }
 
-load_file_error::load_file_error(const std::string &filename)
-{
-    this->msg = "Could not load file: \"";
-    this->msg += filename;
-    this->msg += "\" Try checking the path.";
-}
-
-const char *load_file_error::what() const noexcept { return this->msg.c_str(); }
-
 const char *mem_type_error::what() const noexcept
 {
     return "Cannot create memory of this type";

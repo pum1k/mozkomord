@@ -103,7 +103,7 @@ void Interpreter<T>::left_square_bracket_(BF::Interpreter<T> *inter)
 {
     if (inter->mem->ref() != 0)
     {
-        Program::container::const_iterator tmp = inter->inst_ptr;
+        utils::Program::container::const_iterator tmp = inter->inst_ptr;
         do
         {
             inter->inst_ptr = tmp + 1;
@@ -175,7 +175,7 @@ Interpreter<T>::~Interpreter()
 }
 
 template <class T>
-bool Interpreter<T>::run(const Program::container &prog)
+bool Interpreter<T>::run(const utils::Program::container &prog)
 {
     if (this->mem == nullptr)
     {
@@ -191,7 +191,7 @@ bool Interpreter<T>::run(const Program::container &prog)
 }
 
 template <class T>
-bool Interpreter<T>::run(const BF::Program &prog)
+bool Interpreter<T>::run(const utils::Program &prog)
 {
     return this->run(prog.get_const());
 }
@@ -543,7 +543,7 @@ DebugInterpreter<T>::~DebugInterpreter()
 }
 
 template <class T>
-bool DebugInterpreter<T>::run(const Program::container &prog)
+bool DebugInterpreter<T>::run(const utils::Program::container &prog)
 {
     this->prog_begin = prog.begin();
     return this->Interpreter<T>::run(prog);
@@ -561,7 +561,7 @@ void OptimizedInterpreter<T>::multi_value_inc_(BF::Interpreter<T> *inter)
     OptimizedInterpreter *o_inter =
         static_cast<OptimizedInterpreter<T> *>(inter);
 
-    o_inter->mem->ref() += prog_to_uint(o_inter->inst_ptr);
+    o_inter->mem->ref() += utils::prog_to_uint(o_inter->inst_ptr);
 }
 
 template <class T>
@@ -570,7 +570,7 @@ void OptimizedInterpreter<T>::multi_value_dec_(BF::Interpreter<T> *inter)
     OptimizedInterpreter *o_inter =
         static_cast<OptimizedInterpreter<T> *>(inter);
 
-    o_inter->mem->ref() -= prog_to_uint(o_inter->inst_ptr);
+    o_inter->mem->ref() -= utils::prog_to_uint(o_inter->inst_ptr);
 }
 
 template <class T>
@@ -579,7 +579,7 @@ void OptimizedInterpreter<T>::multi_memptr_inc_(BF::Interpreter<T> *inter)
     OptimizedInterpreter *o_inter =
         static_cast<OptimizedInterpreter<T> *>(inter);
 
-    o_inter->mem->move_ptr(prog_to_uint(o_inter->inst_ptr));
+    o_inter->mem->move_ptr(utils::prog_to_uint(o_inter->inst_ptr));
 }
 
 template <class T>
@@ -588,7 +588,7 @@ void OptimizedInterpreter<T>::multi_memptr_dec_(BF::Interpreter<T> *inter)
     OptimizedInterpreter *o_inter =
         static_cast<OptimizedInterpreter<T> *>(inter);
 
-    o_inter->mem->move_ptr(-prog_to_uint(o_inter->inst_ptr));
+    o_inter->mem->move_ptr(-utils::prog_to_uint(o_inter->inst_ptr));
 }
 
 // same as Interpreter::left_square_bracket_, but has different code for
@@ -605,7 +605,7 @@ void OptimizedInterpreter<T>::optim_left_square_bracket_(
 
     if (o_inter->mem->ref() != 0)
     {
-        Program::container::const_iterator tmp = o_inter->inst_ptr;
+        utils::Program::container::const_iterator tmp = o_inter->inst_ptr;
         do
         {
             o_inter->inst_ptr = tmp + 1;

@@ -7,11 +7,12 @@
 
 #include "../../common/debugprint.hpp"
 #include "../language.hpp"
+#include "../utils/preprocessor.hpp"
+#include "../utils/program.hpp"
 #include "except.hpp"
 #include "interpreter.hpp"
 #include "memory.hpp"
 #include "preprocessor.hpp"
-#include "program.hpp"
 
 /**
  * This class is responsible for setting up and running interpretation of BF
@@ -42,8 +43,8 @@ class LangBF : public LanguageBase
     BF::MemDataType mem_data_type;
     BF::InterFactory inter_fact;
     BF::MemFactory mem_fact;
-    BF::Program prog;
-    BF::Preprocessor prep;
+    utils::Program prog;
+    utils::Preprocessor prep;
     std::unique_ptr<BF::InterpreterBase> inter;
 
     virtual bool load_options(int argc, const char **argv) override;

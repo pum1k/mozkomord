@@ -28,9 +28,10 @@
 
 #include "../../common/debugprint.hpp"
 #include "../language.hpp"
+#include "../utils/program.hpp"
+#include "../utils/program_utils.hpp"
 #include "memory.hpp"
 #include "preprocessor.hpp"
-#include "program.hpp"
 #include "strings.hpp"
 
 namespace BF
@@ -50,14 +51,14 @@ class InterpreterBase
     InterpreterBase(std::ostream &os, std::istream &is) : os(os), is(is){};
 
     virtual ~InterpreterBase(){};
-    InterpreterBase(const InterpreterBase &) = delete;
-    InterpreterBase(InterpreterBase &&)      = delete;
+    InterpreterBase(const InterpreterBase &)            = delete;
+    InterpreterBase(InterpreterBase &&)                 = delete;
     InterpreterBase &operator=(const InterpreterBase &) = delete;
-    InterpreterBase &operator=(InterpreterBase &&) = delete;
+    InterpreterBase &operator=(InterpreterBase &&)      = delete;
 
-    virtual bool run(const Program::container &prog) = 0;
-    virtual bool run(const BF::Program &prog)        = 0;
-    virtual void reset_memory()                      = 0;
+    virtual bool run(const utils::Program::container &prog) = 0;
+    virtual bool run(const utils::Program &prog)            = 0;
+    virtual void reset_memory()                             = 0;
 };
 
 /**
@@ -82,8 +83,8 @@ class Interpreter : public InterpreterBase
     fptr *function_table;
 
     // iterators pointing to current instruction and end of  program
-    Program::container::const_iterator inst_ptr;
-    Program::container::const_iterator prog_end;
+    utils::Program::container::const_iterator inst_ptr;
+    utils::Program::container::const_iterator prog_end;
 
     // this function reads the program and calls functions from function_table
     void run_();
@@ -113,8 +114,8 @@ class Interpreter : public InterpreterBase
     Interpreter(std::ostream &os, std::istream &is, MemoryBase<T> *mem);
     virtual ~Interpreter() override;
 
-    virtual bool run(const Program::container &prog) override;
-    virtual bool run(const BF::Program &prog) override;
+    virtual bool run(const utils::Program::container &prog) override;
+    virtual bool run(const utils::Program &prog) override;
     virtual void reset_memory() override;
 };
 
@@ -147,7 +148,7 @@ class DebugInterpreter : public Interpreter<T>
     void debug_here();
 
     // iterator pointing to the beginning of the program
-    Program::container::const_iterator prog_begin;
+    utils::Program::container::const_iterator prog_begin;
 
     // functions handling debugging commands
     void print_help();
@@ -170,7 +171,7 @@ class DebugInterpreter : public Interpreter<T>
                      MemDbgrBase<T> *mem_dbgr);
     virtual ~DebugInterpreter() override;
 
-    virtual bool run(const Program::container &prog) override;
+    virtual bool run(const utils::Program::container &prog) override;
 };
 
 /**

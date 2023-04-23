@@ -1,6 +1,6 @@
-#include "optimizer.hpp"
+#include "program_utils.hpp"
 
-namespace BF
+namespace utils
 {
 
 template <class iterator,
@@ -34,4 +34,4 @@ uint16_t prog_to_uint(iterator &inst_ptr)
     return rv;
 }
 
-} // namespace BF
+} // namespace utils

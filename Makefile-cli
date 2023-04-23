@@ -25,9 +25,11 @@ BINARY_NAME               := bfi.exe
 SOURCES_PATHS             := ./src/cli
 SOURCES_PATHS             += ./src/cli/BF
 SOURCES_PATHS             += ./src/cli/platform
+SOURCES_PATHS             += ./src/cli/utils
 HEADERS_PATHS             := ./src/cli
 HEADERS_PATHS             += ./src/cli/BF
 HEADERS_PATHS             += ./src/cli/platform
+HEADERS_PATHS             += ./src/cli/utils
 HEADERS_PATHS             += ./src/common
 PRECOMPILED_HEADERS_PATHS :=
 

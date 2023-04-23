@@ -68,19 +68,6 @@ class missing_bracket_error : public syntax_error
 };
 
 /**
- * Exception signaling error while trying to open file.
- */
-class load_file_error : public std::exception
-{
- private:
-    std::string msg;
-
- public:
-    load_file_error(const std::string &filename);
-    virtual const char *what() const noexcept override;
-};
-
-/**
  * This exception will be thrown by BF memory factory when the requested type is
  * not valid.
  */
