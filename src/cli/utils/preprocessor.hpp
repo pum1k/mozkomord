@@ -31,9 +31,9 @@ class Preprocessor
 namespace check
 {
 
-void check_balance(const Program::container &prog,
-                   Program::value_type open_token,
-                   Program::value_type close_token);
+void check_balanced_brackets(const Program::container &prog, size_t size,
+                             Program::value_type *opening_tokens,
+                             Program::value_type *closing_tokens);
 
 } // namespace check
 

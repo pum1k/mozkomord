@@ -25,28 +25,46 @@ void Preprocessor::process(Program &prog, bool keep_debug /* = true */)
 namespace check
 {
 
-void check_balance(const Program::container &prog,
-                   Program::value_type open_token,
-                   Program::value_type close_token)
+void check_balanced_brackets(const Program::container &prog, size_t size,
+                             Program::value_type *opening_tokens,
+                             Program::value_type *closing_tokens)
 {
-    int opening_bracket_count = 0;
-    int line_num              = 1;
-    int char_num              = 0;
+    auto find = [size](Program::value_type *haystack,
+                       Program::value_type needle) -> int
+    {
+        for (size_t i = 0; i < size; i++)
+        {
+            if (haystack[i] == needle)
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    };
+
+    std::vector<Program::value_type> opened_stack;
+    int line_num = 1;
+    int char_num = 0;
+
+    int tmp;
+
     for (char c : prog)
     {
         ++char_num;
 
-        if (c == open_token)
+        if ((tmp = find(opening_tokens, c)) != -1)
         {
-            ++opening_bracket_count;
+            opened_stack.push_back(c);
         }
-        else if (c == close_token)
+        else if ((tmp = find(closing_tokens, c)) != -1)
         {
-            --opening_bracket_count;
-            if (opening_bracket_count < 0)
+            if (opened_stack.size() == 0 ||
+                (opened_stack.back() != opening_tokens[tmp]))
             {
                 throw unexpected_token_error(line_num, char_num);
             }
+            opened_stack.pop_back();
         }
         else if (c == '\n')
         {
@@ -54,9 +72,9 @@ void check_balance(const Program::container &prog,
             char_num = 0;
         }
     }
-    if (opening_bracket_count > 0)
+    if (opened_stack.size() > 0)
     {
-        throw missing_token_error(std::string() + (char)close_token);
+        throw missing_token_error(std::string() + (char)opened_stack.back());
     }
 }
 

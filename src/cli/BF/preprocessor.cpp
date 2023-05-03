@@ -8,7 +8,9 @@ namespace check
 
 void standard(const utils::Program::container &prog)
 {
-    utils::check::check_balance(prog, '[', ']');
+    utils::Program::value_type opening[] = {'['};
+    utils::Program::value_type closing[] = {']'};
+    utils::check::check_balanced_brackets(prog, 1, opening, closing);
 }
 
 } // namespace check
