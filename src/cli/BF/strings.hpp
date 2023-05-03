@@ -38,10 +38,6 @@ inline constexpr const char *mem_ptr_null_error =
 inline constexpr const char *mem_index_error =
     "Memory does not contain element with index: ";
 
-// syntax error
-
-inline constexpr const char *syntax_error_prefix = "Syntax error: ";
-
 // #############################################################################
 // #### DEBUGGER MESSAGES ######################################################
 // #############################################################################
