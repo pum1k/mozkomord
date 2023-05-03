@@ -5,6 +5,7 @@
 #include <functional>
 #include <list>
 
+#include "../utils/preprocessor.hpp"
 #include "../utils/program.hpp"
 #include "except.hpp"
 #include "optimizer.hpp"
@@ -25,12 +26,6 @@ void standard(const utils::Program::container &prog);
 
 namespace prep
 {
-
-/**
- * Does nothing.
- * Used as preprocessing function if no preprocessing should be done.
- */
-void noop(utils::Program::container &, bool);
 
 /**
  * Removes all symbols that are not used by BF language. (symbols that are NOT

@@ -16,58 +16,6 @@ namespace BF
 {
 
 /**
- * Base class for exceptions caused by BF syntax error.
- */
-class syntax_error : public std::exception
-{
- public:
-    virtual const char *what() const noexcept override
-    {
-        return "BF::syntax_error";
-    };
-};
-
-/**
- * Exception signaling unexpected closing bracket in BF source code.
- * This class holds line and column number of the place where the error
- * occurred.
- */
-class unexpected_bracket_error : public syntax_error
-{
- private:
-    std::pair<int, int> pos;
-    std::string msg;
-    void init_msg();
-
- public:
-    unexpected_bracket_error() : pos({0, 0}) { this->init_msg(); };
-    unexpected_bracket_error(int line, int col) : pos({line, col})
-    {
-        this->init_msg();
-    };
-    unexpected_bracket_error(const std::pair<int, int> &pos) : pos(pos){};
-
-    virtual const char *what() const noexcept override;
-
-    bool has_pos() const noexcept;
-    const std::pair<int, int> &get_pos() const noexcept { return pos; };
-};
-
-/**
- * Exception signaling missing closing bracket.
- * Does not hold any additional data about the error.
- */
-class missing_bracket_error : public syntax_error
-{
- private:
-    std::string msg;
-
- public:
-    missing_bracket_error();
-    virtual const char *what() const noexcept override;
-};
-
-/**
  * This exception will be thrown by BF memory factory when the requested type is
  * not valid.
  */

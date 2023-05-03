@@ -8,43 +8,13 @@ namespace check
 
 void standard(const utils::Program::container &prog)
 {
-    int opening_bracket_count = 0;
-    int line_num              = 1;
-    int char_num              = 0;
-    for (char c : prog)
-    {
-        ++char_num;
-
-        if (c == '[')
-        {
-            ++opening_bracket_count;
-        }
-        else if (c == ']')
-        {
-            --opening_bracket_count;
-            if (opening_bracket_count < 0)
-            {
-                throw unexpected_bracket_error(line_num, char_num);
-            }
-        }
-        else if (c == '\n')
-        {
-            ++line_num;
-            char_num = 0;
-        }
-    }
-    if (opening_bracket_count > 0)
-    {
-        throw missing_bracket_error();
-    }
+    utils::check::check_balance(prog, '[', ']');
 }
 
 } // namespace check
 
 namespace prep
 {
-
-void noop(utils::Program::container &, bool) {}
 
 void remove_unused(utils::Program::container &prog, bool keep_debug)
 {

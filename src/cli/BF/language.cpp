@@ -86,7 +86,7 @@ void LangBF::setup_preprocessor()
 
     if (this->debug.get_val())
     {
-        this->prep.set_process(BF::prep::noop);
+        this->prep.set_process(utils::prep::noop);
     }
     else if (this->optimize.get_val())
     {

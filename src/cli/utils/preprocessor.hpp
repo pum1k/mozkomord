@@ -28,6 +28,26 @@ class Preprocessor
     void process(Program &prog, bool keep_debug = true);
 };
 
+namespace check
+{
+
+void check_balance(const Program::container &prog,
+                   Program::value_type open_token,
+                   Program::value_type close_token);
+
+} // namespace check
+
+namespace prep
+{
+
+/**
+ * Does nothing.
+ * Used as preprocessing function if no preprocessing should be done.
+ */
+void noop(utils::Program::container &, bool);
+
+} // namespace prep
+
 } // namespace utils
 
 #endif // CLI_UTILS_PREPROCESSOR_HPP_

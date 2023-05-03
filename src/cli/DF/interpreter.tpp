@@ -65,7 +65,7 @@ void DFInterpreter<T>::df_left_cond(BF::Interpreter<T> *inter)
 
     if (df_inter->mem->ref() != 0)
     {
-        BF::Program::container::const_iterator tmp = df_inter->inst_ptr;
+        utils::Program::container::const_iterator tmp = df_inter->inst_ptr;
         do
         {
             df_inter->inst_ptr = tmp + 1;
