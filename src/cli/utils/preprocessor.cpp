@@ -45,7 +45,7 @@ void check_balanced_brackets(const Program::container &prog, size_t size,
 
     std::vector<Program::value_type> opened_stack;
     int line_num = 1;
-    int char_num = 0;
+    int char_num = 1;
 
     int tmp;
 
@@ -69,7 +69,7 @@ void check_balanced_brackets(const Program::container &prog, size_t size,
         else if (c == '\n')
         {
             ++line_num;
-            char_num = 0;
+            char_num = 1;
         }
     }
     if (opened_stack.size() > 0)
