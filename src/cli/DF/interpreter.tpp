@@ -55,7 +55,7 @@ void DFInterpreter<T>::df_read(BF::Interpreter<T> *inter)
     {
         throw std::runtime_error(BF::strings::prog_read_input_error);
     }
-    df_inter->mem->ref() = c;
+    df_inter->mem2->ref() = c;
 }
 
 template <class T>
@@ -63,7 +63,7 @@ void DFInterpreter<T>::df_left_cond(BF::Interpreter<T> *inter)
 {
     DFInterpreter<T> *df_inter = static_cast<DFInterpreter<T> *>(inter);
 
-    if (df_inter->mem->ref() != 0)
+    if (df_inter->mem2->ref() != 0)
     {
         utils::Program::container::const_iterator tmp = df_inter->inst_ptr;
         do
@@ -81,9 +81,9 @@ void DFInterpreter<T>::df_left_cond(BF::Interpreter<T> *inter)
         do
         {
             ++df_inter->inst_ptr;
-            if (*df_inter->inst_ptr == ']')
+            if (*df_inter->inst_ptr == '}')
                 --stop_after;
-            else if (*df_inter->inst_ptr == '[')
+            else if (*df_inter->inst_ptr == '{')
                 ++stop_after;
 
         } while (stop_after != 0);
