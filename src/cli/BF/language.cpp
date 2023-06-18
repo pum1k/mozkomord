@@ -43,8 +43,7 @@ void LangBF::process_options()
     // This option is queried later in the program
     if (!this->filename.is_set())
     {
-        throw options_error(
-            "You must specify file to run. (options \"-f\" or \"--file\")");
+        throw options_error("You must specify file to run.");
     }
 
     // Memory type
@@ -203,7 +202,7 @@ catch (const std::exception &e)
 }
 
 LangBF::LangBF()
-    : filename({"-f", "--file"}, "Load program from this file. (REQUIRED)\n"),
+    : filename("filename", "Load program from this file. (REQUIRED)", true),
       mem_type(
           {"--mem-type"},
           "Set memory type. Available values:\n"
@@ -222,7 +221,7 @@ LangBF::LangBF()
           "This option is ignored when using dynamic memory. "
           "(However, it will still cause an error if set to invalid value.)",
           30000),
-      mem_cell_size({"--mem-size"},
+      mem_cell_size({"--cell-size"},
                     "Set number of bits for every stack entry.\n"
                     "Allowed values: 8 (default), 16",
                     BF::MemDataType::bit8),
