@@ -46,6 +46,14 @@ namespace prep
  */
 void noop(utils::Program::container &, bool);
 
+/**
+ * Returns a function that can be used as preprocessor's process function. The
+ * returned function will remove all characters, that are not contained in the
+ * used_chars string.
+ */
+std::function<void(utils::Program::container &, bool)> get_unused_remover(
+    std::string used_chars);
+
 } // namespace prep
 
 } // namespace utils

@@ -85,6 +85,25 @@ namespace prep
 
 void noop(utils::Program::container &, bool) {}
 
+std::function<void(utils::Program::container &, bool)> get_unused_remover(
+    std::string used_chars)
+{
+    auto pred = [used_chars](char c) -> bool
+    {
+        for (auto used : used_chars)
+        {
+            if (c == used)
+            {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    return [pred](utils::Program::container &prog, bool) -> void
+    { prog.erase(std::remove_if(prog.begin(), prog.end(), pred), prog.end()); };
+}
+
 } // namespace prep
 
 } // namespace utils
