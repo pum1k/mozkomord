@@ -1,7 +1,9 @@
+#include <argparser.hpp>
 #include <iostream>
 #include <memory>
 
 #include "BF/language.hpp"
+#include "DF/language.hpp"
 #include "language.hpp"
 #include "platform/setup.hpp"
 
@@ -17,10 +19,30 @@ int main(int argc, const char *argv[])
                      "options.\n";
         return -1;
     }
+    std::string language = argv[1];
 
     std::unique_ptr<LanguageBase> lang = nullptr;
 
-    lang = std::make_unique<LangBF>();
+    if (language == "--help" || language == "-h")
+    {
+        std::cout << "Available languages:\n"
+                  << "  BF -- BrainFuck\n"
+                  << "  DF -- DoubleFuck\n";
+        return 0;
+    }
+    else if (language == "BF")
+    {
+        lang = std::make_unique<LangBF>();
+    }
+    else if (language == "DF")
+    {
+        lang = std::make_unique<LangDF>();
+    }
+    else
+    {
+        std::cerr << "Language not recognised.";
+        return -1;
+    }
 
     try
     {

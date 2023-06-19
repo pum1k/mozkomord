@@ -139,7 +139,7 @@ bool LangBF::load_options(int argc, const char **argv)
 
     try
     {
-        unrecognised = argp::parse(argc, argv, this->opts, 1);
+        unrecognised = argp::parse(argc, argv, this->opts, 2);
     }
     catch (const std::exception &e)
     {
