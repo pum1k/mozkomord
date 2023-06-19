@@ -32,15 +32,15 @@ class LangBF : public LanguageBase
 {
  protected:
     // check if command line options are valid, update inner classes accordingly
-    void process_options();
+    virtual void process_options();
     // load file to prog object
-    void setup_program();
-    // set fuctions for preprocessing the BF code
-    void setup_preprocessor();
+    virtual void setup_program();
+    // set functions for preprocessing the BF code
+    virtual void setup_preprocessor();
     // create interpreter object
-    void setup_interpreter();
+    virtual void setup_interpreter();
 
-    argp::KeywordOption<std::string> filename;
+    argp::PositionalOption<std::string> filename;
     argp::KeywordOption<BF::MemoryType> mem_type;
     argp::KeywordOption<int> mem_size;
     argp::KeywordOption<BF::MemDataType> mem_cell_size;

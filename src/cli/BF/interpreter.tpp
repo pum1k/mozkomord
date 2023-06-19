@@ -12,7 +12,9 @@ namespace BF
 template <class T>
 void Interpreter<T>::run_()
 {
-    const auto end = this->prog_end;
+    const auto end         = this->prog_end;
+    this->return_one_level = false;
+
     for (; (!this->return_one_level) && (this->inst_ptr < end); ++inst_ptr)
     {
         (this->function_table[(*this->inst_ptr)])(this);
