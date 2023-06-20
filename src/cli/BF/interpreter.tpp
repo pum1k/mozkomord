@@ -593,6 +593,15 @@ void OptimizedInterpreter<T>::multi_memptr_dec_(BF::Interpreter<T> *inter)
     o_inter->mem->move_ptr(-utils::prog_to_uint(o_inter->inst_ptr));
 }
 
+template <class T>
+void OptimizedInterpreter<T>::mem_set_zero_(BF::Interpreter<T> *inter)
+{
+    OptimizedInterpreter *o_inter =
+        static_cast<OptimizedInterpreter<T> *>(inter);
+
+    o_inter->mem->ref() = 0;
+}
+
 // same as Interpreter::left_square_bracket_, but has different code for
 // skipping the loops
 // this is done because multi character optimized instructions may contain
@@ -651,6 +660,8 @@ OptimizedInterpreter<T>::OptimizedInterpreter(std::ostream &os,
                            &OptimizedInterpreter::multi_memptr_inc_);
     this->register_handler(BF::optimizers::op_multi_ptr_dec,
                            &OptimizedInterpreter::multi_memptr_dec_);
+    this->register_handler(BF::optimizers::op_set_zero,
+                           &OptimizedInterpreter::mem_set_zero_);
     this->register_handler('[',
                            &OptimizedInterpreter::optim_left_square_bracket_);
 }

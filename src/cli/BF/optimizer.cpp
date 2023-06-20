@@ -93,6 +93,45 @@ void remove_consecutive_operations(
     streak = 0;
 }
 
+void replace_set_zero(std::list<utils::Program::value_type> &prog_l)
+{
+    using iter_t = std::list<utils::Program::value_type>::iterator;
+
+    int length = 0;
+
+    iter_t pattern_start_it;
+
+    for (iter_t it = prog_l.begin(), eit = prog_l.end(); it != eit; ++it)
+    {
+        if (length == 3)
+        {
+            *pattern_start_it = op_set_zero;
+            ++pattern_start_it;
+            prog_l.erase(pattern_start_it, it);
+
+            length = 0;
+        }
+
+        if (length == 0 && *it == '[')
+        {
+            ++length;
+            pattern_start_it = it;
+        }
+        else if (length == 1 && (*it == '-' || *it == '+'))
+        {
+            ++length;
+        }
+        else if (length == 2 && *it == ']')
+        {
+            ++length;
+        }
+        else
+        {
+            length = 0;
+        }
+    }
+}
+
 } // namespace optimizers
 
 } // namespace BF

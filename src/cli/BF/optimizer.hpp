@@ -23,6 +23,7 @@ enum : unsigned char
     op_multi_ptr_inc,
     op_multi_ptr_dec,
     op_mark_3_byte_end,
+    op_set_zero,
 };
 
 /**
@@ -31,6 +32,12 @@ enum : unsigned char
  */
 void remove_consecutive_operations(
     std::list<utils::Program::value_type> &prog_l);
+
+/**
+ * Replace the "[-]" and "[+]" patterns with a single instruction that has the
+ * same effect.
+ */
+void replace_set_zero(std::list<utils::Program::value_type> &prog_l);
 
 } // namespace optimizers
 

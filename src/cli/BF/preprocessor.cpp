@@ -48,6 +48,7 @@ void optimize(utils::Program::container &prog, bool keep_debug)
 
     std::list<utils::Program::value_type> prog_l(prog.begin(), prog.end());
 
+    optimizers::replace_set_zero(prog_l);
     optimizers::remove_consecutive_operations(prog_l);
 
     prog.resize(prog_l.size());
